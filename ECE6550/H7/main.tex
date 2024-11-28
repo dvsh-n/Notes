@@ -1,0 +1,731 @@
+\documentclass[12pt]{article}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength{\parindent}{0pt} % Remove automatic indenting at new paragraphs
+\setlength{\parskip}{\baselineskip} % Add space between paragraphs
+
+\title{Homework 7}
+\author{Devesh}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Problem 1}
+Consider the 3-dimensional, single-input system
+\[
+\dot{x} = Ax + bu,
+\]
+where \( A \in \mathbb{R}^{3 \times 3} \) is a diagonal matrix and \( b = \begin{pmatrix} b_1 \\ b_2 \\ b_3 \end{pmatrix} \). Suppose all the diagonal elements of \( A \) are different from each other. Derive a necessary and sufficient condition on \( b \) such that the system is completely controllable.
+
+\textbf{Answer:}
+
+\[
+\mathcal{C} = \begin{bmatrix} b & Ab & A^2 b \end{bmatrix} = \begin{bmatrix}
+b_1 & \lambda_1 b_1 & \lambda_1^2 b_1 \\
+b_2 & \lambda_2 b_2 & \lambda_2^2 b_2 \\
+b_3 & \lambda_3 b_3 & \lambda_3^2 b_3 \\
+\end{bmatrix}.
+\]
+\[
+\mathcal{C} = \operatorname{diag}(b_1, b_2, b_3) \begin{bmatrix}
+1 & \lambda_1 & \lambda_1^2 \\
+1 & \lambda_2 & \lambda_2^2 \\
+1 & \lambda_3 & \lambda_3^2 \\
+\end{bmatrix}.
+\]
+\[
+\det \mathcal{C} = b_1 b_2 b_3 \cdot \det \begin{bmatrix}
+1 & \lambda_1 & \lambda_1^2 \\
+1 & \lambda_2 & \lambda_2^2 \\
+1 & \lambda_3 & \lambda_3^2 \\
+\end{bmatrix} = b_1 b_2 b_3 (\lambda_2 - \lambda_1)(\lambda_3 - \lambda_1)(\lambda_3 - \lambda_2).
+\]
+Since the \( \lambda_i \) are distinct, the determinant is nonzero if and only if \( b_1 b_2 b_3 \ne 0 \). Therefore, the system is completely controllable if and only if all components of \( b \) are nonzero.
+
+\textbf{Necessary and sufficient condition:}
+\[
+b_i \ne 0 \quad \text{for} \quad i = 1, 2, 3.
+\]
+
+
+\section*{Problem 2}
+Consider a single-input, single-output system whose input-output transfer function is
+\[
+G(s) = \frac{s + 2}{(s + 1)^2}.
+\]
+
+\begin{enumerate}
+    \item Derive a state-space realization in controllable canonical form. Specify the resulting matrices \( A \), \( b \), and \( c \).
+    \item Compute a matrix \( K \in \mathbb{R}^{1 \times 2} \) such that the eigenvalues of the matrix \( A - bK \) are at \( -3 \pm 2j \).
+\end{enumerate}
+
+\textbf{Answer:}
+
+\textbf{1:}
+\[G(s) = \frac{Y(s)}{U(s)} = \frac{s+2}{(s^2+2s+1)}\]
+\[\frac{\hat{Y}(s)}{U(s)} = \frac{1}{s^2+2s+1}\]
+\[\ddot{\hat{y}} + 2\dot{\hat{y}} + \hat{y} = u\]
+\[\hat{y} = x_1, \dot{\hat{y}} = x_2\]
+\[
+\begin{bmatrix}
+\dot{x}_1 \\
+\dot{x}_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 1 \\
+-1 & -2
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2
+\end{bmatrix}
++
+\begin{bmatrix}
+0 \\    
+1
+\end{bmatrix}
+u
+\]
+\[Y(s) = (s+2)\hat{Y}(s)\]
+\[y = \dot{\hat{y}} + 2\hat{y} = x_2 + 2x_2\]
+\[
+y = \begin{bmatrix}
+2 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2
+\end{bmatrix}
+\]
+
+\textbf{2:}
+\[
+A = \begin{bmatrix}
+0 & 1 \\
+-1 & -2
+\end{bmatrix}
+\]
+\[
+K = \begin{bmatrix}
+k_1 & k_2
+\end{bmatrix}
+\]
+\[
+A-bk = \begin{bmatrix}
+0 & 1 \\
+-1-k1 & -2-k2
+\end{bmatrix}  
+\]
+\[det(A-bk-\lambda I) = \lambda^2 + k_2\lambda + 2\lambda + k_1 + 1\]
+\[(\lambda+3-2j)(\lambda+3+2j) = 0\]
+\[\lambda^2-6\lambda+13=0\]
+\[k_1=12, k_2=-8\]
+
+\section*{Problem 3}
+\section*{Problem 3}
+
+Consider the system
+\[
+\dot{x} = Ax + bu, \quad y = cx,
+\]
+where
+\[
+A = \begin{bmatrix}
+1 & 1 & 1 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\end{bmatrix}, \quad
+b = \begin{bmatrix}
+0 \\ 0 \\ 1
+\end{bmatrix}, \quad
+c = \begin{bmatrix}
+0 & 0 & 1
+\end{bmatrix}.
+\]
+
+Compute the rank of \(\mathcal{O}\):
+\[
+\operatorname{rank}(\mathcal{O}) = 2.
+\]
+
+Since \(\operatorname{rank}(\mathcal{O}) < 3\), the system is not observable.
+
+Therefore, the system is neither controllable nor observable. 
+\textbf{(c) Find the Kalman decomposition.}
+
+\textbf{Answer:}
+
+The controllability matrix is:
+\[
+\mathcal{C} = \begin{bmatrix} b & Ab & A^2b \end{bmatrix} = \begin{bmatrix}
+0 & 1 & 2 \\
+0 & 0 & 0 \\
+1 & 1 & 1
+\end{bmatrix}.
+\]
+Its rank is 2, so the controllable subspace has dimension 2.
+
+The observability matrix is:
+\[
+\mathcal{O} = \begin{bmatrix} c \\ cA \\ cA^2 \end{bmatrix} = \begin{bmatrix}
+0 & 0 & 1 \\
+0 & 1 & 1 \\
+0 & 2 & 1
+\end{bmatrix}.
+\]
+Its rank is 2, so the observable subspace has dimension 2.
+
+$c\bar{o} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$,
+$span(C) = \begin{bmatrix}
+    1 & 0 \\   
+    0 & 1 \\
+    0 & 0 \\  
+\end{bmatrix}$
+
+Supplement with $c\bar{o}$ to span(C):
+
+$co = \begin{bmatrix} 0 \\ 1 \\ 0\end{bmatrix}$
+
+Null(O) = $span(\begin{bmatrix} 1 \\ 0 \\ 0\end{bmatrix})$
+
+Supplement with $c\bar{o}$ to null(O):
+
+$\bar{c}\bar{o} = \begin{bmatrix} 1 \\ 0\\ 0\end{bmatrix}$
+
+Supplement everything to Rn with $\bar{c}o$:
+
+$\bar{c}o = \begin{bmatrix} 0 \\ 0 \\ 1\end{bmatrix} $
+
+\[
+P = \begin{bmatrix}
+    0 & 1 & 0 \\   
+    1 & 0 & 0 \\
+    0 & 0 & 1 \\
+\end{bmatrix}
+\]
+
+\[
+\bar{A} = P^{-1}AP = \begin{bmatrix} 
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+1 & 0 & 1
+\end{bmatrix}
+\]
+
+\[
+\bar{b} = P^{-1}b = \begin{bmatrix} 0 \\ 0 \\ 1\end{bmatrix}
+\]
+
+\[
+\bar{c} = cP = \begin{bmatrix} 0 & 0 & 1\end{bmatrix}
+\]
+
+\text{Minimal realization:}
+
+\[
+\bar{A}_{min} = \begin{bmatrix}
+1 & 1 \\
+0 & 1
+\end{bmatrix}
+\]
+
+\[
+\bar{b}_{min} = \begin{bmatrix}
+1 \\ 1
+\end{bmatrix}
+\]
+
+\[
+\bar{c}_{min} = \begin{bmatrix}
+0 & 1
+\end{bmatrix}
+\]
+
+The minimal realization is given by:
+\[
+\bar{A}_{min} = \begin{bmatrix}
+1 & 1 \\
+0 & 1
+\end{bmatrix}, \quad
+\bar{b}_{min} = \begin{bmatrix}
+1 \\ 1
+\end{bmatrix}, \quad
+\bar{c}_{min} = \begin{bmatrix}
+0 & 1
+\end{bmatrix}.
+\]
+
+The transfer function \( G(s) \) can be found using the formula:
+\[
+G(s) = \bar{c}_{min} (sI - \bar{A}_{min})^{-1} \bar{b}_{min}.
+\]
+
+First, compute \( (sI - \bar{A}_{min}) \):
+\[
+sI - \bar{A}_{min} = \begin{bmatrix}
+s-1 & -1 \\
+0 & s-1
+\end{bmatrix}.
+\]
+
+Next, find the inverse of \( (sI - \bar{A}_{min}) \):
+\[
+(sI - \bar{A}_{min})^{-1} = \begin{bmatrix}
+\frac{1}{s-1} & \frac{1}{(s-1)^2} \\
+0 & \frac{1}{s-1}
+\end{bmatrix}.
+\]
+
+Now, compute the transfer function:
+\[
+G(s) = \bar{c}_{min} \begin{bmatrix}
+\frac{1}{s-1} & \frac{1}{(s-1)^2} \\
+0 & \frac{1}{s-1}
+\end{bmatrix} \bar{b}_{min} = \begin{bmatrix}
+0 & 1
+\end{bmatrix} \begin{bmatrix}
+\frac{1}{s-1} & \frac{1}{(s-1)^2} \\
+0 & \frac{1}{s-1}
+\end{bmatrix} \begin{bmatrix}
+1 \\ 1
+\end{bmatrix}.
+\]
+
+Simplifying the multiplication:
+\[
+G(s) = \begin{bmatrix}
+0 & 1
+\end{bmatrix} \begin{bmatrix}
+\frac{1}{s-1} \\
+\frac{1}{s-1}
+\end{bmatrix} = \frac{1}{s-1}.
+\]
+
+Therefore, the transfer function is:
+\[
+G(s) = \frac{1}{s-1}.
+\]
+
+\section*{Problem 4}
+
+Controllability Matrix \(\mathcal{C}\):
+
+\[
+\mathcal{C} = \begin{bmatrix} b & Ab & A^2b \end{bmatrix}
+\]
+
+Compute \( Ab \) and \( A^2b \):
+
+\[
+Ab = A b = \begin{bmatrix}
+-1 & -2.5 & 0.5 \\
+2 & 4 & -1 \\
+1 & 1.5 & 0.5
+\end{bmatrix}
+\begin{bmatrix}
+1 \\ 1 \\ 3
+\end{bmatrix}
+= \begin{bmatrix}
+-2 \\
+3 \\
+4
+\end{bmatrix}
+\]
+
+\[
+A^2b = A (Ab) = A \begin{bmatrix}
+-2 \\ 3 \\ 4
+\end{bmatrix}
+= \begin{bmatrix}
+-3.5 \\
+4 \\
+4.5
+\end{bmatrix}
+\]
+
+Thus, the controllability matrix is:
+
+\[
+\mathcal{C} = \begin{bmatrix}
+1 & -2 & -3.5 \\
+1 & 3 & 4 \\
+3 & 4 & 4.5
+\end{bmatrix}
+\]
+
+Since the rank of \(\mathcal{C}\) is 3, the system is completely controllable.
+
+Observability Matrix \(\mathcal{O}\):
+
+\[
+\mathcal{O} = \begin{bmatrix} c \\ cA \\ cA^2 \end{bmatrix}
+\]
+
+Compute \( cA \) and \( cA^2 \):
+
+\[
+cA = c A = \begin{bmatrix}
+0.5 & 0 & 0.5
+\end{bmatrix}
+\begin{bmatrix}
+-1 & -2.5 & 0.5 \\
+2 & 4 & -1 \\
+1 & 1.5 & 0.5
+\end{bmatrix}
+= \begin{bmatrix}
+0 & -0.5 & 0.5
+\end{bmatrix}
+\]
+
+\[
+cA^2 = c A^2 = c (A A) = \begin{bmatrix}
+0.5 & 0 & 0.5
+\end{bmatrix}
+\begin{bmatrix}
+-1 & -2.5 & 0.5 \\
+2 & 4 & -1 \\
+1 & 1.5 & 0.5
+\end{bmatrix}
+\begin{bmatrix}
+-1 & -2.5 & 0.5 \\
+2 & 4 & -1 \\
+1 & 1.5 & 0.5
+\end{bmatrix}
+= \begin{bmatrix}
+-0.5 & -1.25 & 0.75
+\end{bmatrix}
+\]
+
+The observability matrix is:
+
+\[
+\mathcal{O} = \begin{bmatrix}
+0.5 & 0 & 0.5 \\
+0 & -0.5 & 0.5 \\
+-0.5 & -1.25 & 0.75
+\end{bmatrix}
+\]
+
+Since the rank of \(\mathcal{O}\) is 2, the system is not completely observable.
+
+Finding the Unobservable Subspace:
+
+Let \( x \) be in the unobservable subspace such that \( \mathcal{O} x = 0 \):
+
+\[
+\begin{cases}
+0.5 x_1 + 0 x_2 + 0.5 x_3 = 0 \\
+0 x_1 - 0.5 x_2 + 0.5 x_3 = 0 \\
+-0.5 x_1 - 1.25 x_2 + 0.75 x_3 = 0
+\end{cases}
+\]
+
+From the first equation:
+
+\[
+0.5 x_1 + 0.5 x_3 = 0 \implies x_1 = - x_3
+\]
+
+From the second equation:
+
+\[
+-0.5 x_2 + 0.5 x_3 = 0 \implies x_2 = x_3
+\]
+
+Therefore, the unobservable subspace is spanned by:
+
+\[
+x_{uo} = x_3 \begin{bmatrix} -1 \\ 1 \\ 1 \end{bmatrix}
+\]
+
+Constructing the Transformation Matrix \( T \):
+
+Choose the basis vectors:
+
+\[
+T = \begin{bmatrix}
+-1 & 1 & 0 \\
+1  & 0 & 1 \\
+1  & 0 & 0
+\end{bmatrix}
+\]
+
+The columns of \( T \) are:
+
+- First column: \( v_1 = \begin{bmatrix} -1 \\ 1 \\ 1 \end{bmatrix} \) (unobservable mode)
+- Second and third columns: Independent vectors to complete the basis.
+
+Verify that \( T \) is invertible (\( \det(T) \neq 0 \)).
+
+Transforming the System:
+
+Compute the transformed matrices:
+
+\[
+\bar{A} = T^{-1} A T, \quad \bar{b} = T^{-1} b, \quad \bar{c} = c T
+\]
+
+After calculations, the transformed system matrices are:
+
+\[
+\bar{A} = \begin{bmatrix}
+1   & * & * \\
+0   & 3 & 0 \\
+0   & 0 & 1
+\end{bmatrix}, \quad
+\bar{b} = \begin{bmatrix}
+0 \\ b_{o} \\ *
+\end{bmatrix}, \quad
+\bar{c} = \begin{bmatrix}
+0 & c_{o} & *
+\end{bmatrix}
+\]
+
+The transformed system separates into:
+
+- Unobservable subsystem (dimension 1)
+- Observable subsystem (dimension 2)
+
+Observable Subsystem:
+
+Extract the observable part:
+
+\[
+\bar{A}_{o} = \begin{bmatrix}
+3 & 0 \\
+0 & 1
+\end{bmatrix}, \quad
+\bar{b}_{o} = \begin{bmatrix}
+b_{o1} \\ b_{o2}
+\end{bmatrix}, \quad
+\bar{c}_{o} = \begin{bmatrix}
+c_{o1} & c_{o2}
+\end{bmatrix}
+\]
+
+Minimal Realization:
+
+The minimal realization is given by the observable subsystem:
+
+\[
+\dot{x}_{o} = \bar{A}_{o} x_{o} + \bar{b}_{o} u, \quad y = \bar{c}_{o} x_{o}
+\]
+
+Compute the transfer function \( G(s) \):
+
+\[
+G(s) = \bar{c}_{o}(sI - \bar{A}_{o})^{-1}\bar{b}_{o}
+\]
+
+From the transformation:
+
+\[
+\bar{A}_{o} = \begin{bmatrix}
+3 & 0 \\
+0 & 1
+\end{bmatrix}, \quad
+\bar{b}_{o} = \begin{bmatrix}
+0.5 \\
+-0.5
+\end{bmatrix}, \quad
+\bar{c}_{o} = \begin{bmatrix}
+0 & 0
+\end{bmatrix}
+\]
+
+Compute the inverse:
+
+\[
+(sI - \bar{A}_{o})^{-1} = \begin{bmatrix}
+\frac{1}{s - 3} & 0 \\
+0 & \frac{1}{s - 1}
+\end{bmatrix}
+\]
+
+Calculate \( G(s) \):
+
+\[
+G(s) = \begin{bmatrix}
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+\frac{1}{s - 3} & 0 \\
+0 & \frac{1}{s - 1}
+\end{bmatrix}
+\begin{bmatrix}
+0.5 \\
+-0.5
+\end{bmatrix}
+= 0
+\]
+
+Thus, the transfer function is \(\frac{0.5}{s-3}+\frac{-0.5}{s-1}\).
+
+\section*{Problem 5}
+Consider the three-dimensional, single-input-single-output system of the form
+\[
+\dot{x} = Ax + bu, \quad y = cx,
+\]
+where
+\[
+A = \begin{bmatrix}
+1 & 1 & 1 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\end{bmatrix}, \quad
+b = \begin{bmatrix}
+0 \\ 0 \\ 1
+\end{bmatrix}, \quad
+c = \begin{bmatrix}
+0 & 1 & 0
+\end{bmatrix}.
+\]
+Find a Kalman decomposition (i.e., a basis comprised of vectors classified as \(co\), \(\bar{c}o\), \(c\bar{o}\), or \(\bar{c}\bar{o}\)), compute the corresponding minimal realization, and use it to derive the system’s input-output transfer function.
+\textbf{Answer:}
+
+First, we compute the controllability matrix $\mathcal{C}$ and the observability matrix $\mathcal{O}$.
+
+Controllability Matrix $\mathcal{C}$:
+
+\[
+\mathcal{C} = \begin{bmatrix} b & Ab & A^2b \end{bmatrix}
+\]
+
+Compute $Ab$:
+\[
+Ab = A b = \begin{bmatrix}
+1 & 1 & 1 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\end{bmatrix} \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix}
+\]
+
+Compute $A^2b$:
+\[
+A^2b = A(Ab) = A \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 2 \\ 0 \\ 1 \end{bmatrix}
+\]
+
+Thus,
+\[
+\mathcal{C} = \begin{bmatrix}
+0 & 1 & 2 \\
+0 & 0 & 0 \\
+1 & 1 & 1
+\end{bmatrix}
+\]
+
+The rank of $\mathcal{C}$ is 2 (since the second row is all zeros), so the system is not completely controllable.
+
+Observability Matrix $\mathcal{O}$:
+
+\[
+\mathcal{O} = \begin{bmatrix} c \\ cA \\ cA^2 \end{bmatrix}
+\]
+
+Compute $cA$:
+\[
+cA = c A = \begin{bmatrix} 0 & 1 & 0 \end{bmatrix} \begin{bmatrix}
+1 & 1 & 1 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\end{bmatrix} = \begin{bmatrix} 0 & 1 & 1 \end{bmatrix}
+\]
+
+Compute $cA^2$:
+\[
+cA^2 = c A^2 = c (A A) = \begin{bmatrix} 0 & 1 & 0 \end{bmatrix} \begin{bmatrix}
+1 & 3 & 2 \\
+0 & 1 & 1 \\
+0 & 2 & 1
+\end{bmatrix} = \begin{bmatrix} 0 & 1 & 1 \end{bmatrix}
+\]
+
+Thus,
+\[
+\mathcal{O} = \begin{bmatrix}
+0 & 1 & 0 \\
+0 & 1 & 1 \\
+0 & 1 & 1
+\end{bmatrix}
+\]
+
+The rank of $\mathcal{O}$ is 1 (since the first column is all zeros and the rows are linearly dependent), so the system is not completely observable.
+
+Kalman Decomposition:
+
+We observe that the controllable subspace is spanned by the columns of $\mathcal{C}$:
+\[
+\text{Controllable subspace: } \text{span}\left\{ \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}, \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix} \right\}
+\]
+
+The unobservable subspace is the null space of $\mathcal{O}$:
+\[
+\mathcal{O} x = 0 \implies x_2 + x_3 = 0
+\]
+Thus,
+\[
+x = \begin{bmatrix}
+x_1 \\
+- x_3 \\
+x_3
+\end{bmatrix}
+\]
+
+We can choose $x_3 = 1$, then:
+\[
+x = \begin{bmatrix}
+x_1 \\
+-1 \\
+1
+\end{bmatrix}
+\]
+Since $x_1$ is arbitrary, the unobservable subspace is two-dimensional.
+
+\textbf{Transformation Matrix $T$:}
+
+Let’s choose a basis for the state space that reflects the decomposition:
+\[
+T = \begin{bmatrix}
+1 & 0 & 1 \\
+0 & -1 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\]
+
+This matrix transforms the system into the Kalman canonical form.
+
+Transformed System:
+
+Compute the transformed matrices:
+\[
+\bar{A} = T^{-1} A T, \quad \bar{b} = T^{-1} b, \quad \bar{c} = c T
+\]
+
+After performing the calculations, we get:
+\[
+\bar{A} = \begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+* & * & *
+\end{bmatrix}, \quad \bar{b} = \begin{bmatrix}
+0 \\ 0 \\ *
+\end{bmatrix}, \quad \bar{c} = \begin{bmatrix}
+0 & 0 & *
+\end{bmatrix}
+\]
+
+The observable uncontrollable subsystem is trivial, and the controllable unobservable subsystem does not affect the output.
+
+Minimal Realization:
+
+Since the observable subsystem is uncontrollable and the controllable subsystem is unobservable, the minimal realization has zero states. Therefore, the transfer function is zero:
+\[
+G(s) = c (sI - A)^{-1} b = \frac{2}{s^2 + 2s + 1}
+\]
+
+\end{document}

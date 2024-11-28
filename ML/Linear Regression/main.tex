@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+
+\title{Linear Regression}
+\author{Devesh}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Linear regression is a statistical method for modeling the relationship between a dependent variable and one or more independent variables. It is one of the simplest and most widely used techniques in machine learning.
+
+\section{Simple Linear Regression}
+Simple linear regression models the relationship between two variables by fitting a linear equation to observed data. The equation of a simple linear regression line is:
+
+\begin{equation}
+y = \beta_0 + \beta_1 x + \epsilon
+\end{equation}
+
+where:
+\begin{itemize}
+    \item \( y \) is the dependent variable.
+    \item \( x \) is the independent variable.
+    \item \( \beta_0 \) is the y-intercept.
+    \item \( \beta_1 \) is the slope of the line.
+    \item \( \epsilon \) is the error term.
+\end{itemize}
+
+\section{Multiple Linear Regression}
+Multiple linear regression models the relationship between a dependent variable and multiple independent variables. The equation of a multiple linear regression model is:
+
+\begin{equation}
+y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_n x_n + \epsilon
+\end{equation}
+
+where:
+\begin{itemize}
+    \item \( y \) is the dependent variable.
+    \item \( x_1, x_2, \ldots, x_n \) are the independent variables.
+    \item \( \beta_0 \) is the y-intercept.
+    \item \( \beta_1, \beta_2, \ldots, \beta_n \) are the coefficients of the independent variables.
+    \item \( \epsilon \) is the error term.
+\end{itemize}
+
+\section{Assumptions of Linear Regression}
+Linear regression makes several key assumptions:
+\begin{itemize}
+    \item Linearity: The relationship between the dependent and independent variables is linear.
+    \item Independence: The observations are independent of each other.
+    \item Homoscedasticity: The variance of the error terms is constant across all levels of the independent variables.
+    \item Normality: The error terms are normally distributed.
+\end{itemize}
+
+\section{Evaluating the Model}
+The performance of a linear regression model can be evaluated using several metrics, including:
+\begin{itemize}
+    \item Mean Squared Error (MSE)
+    \item Root Mean Squared Error (RMSE)
+    \item R-squared (\( R^2 \))
+\end{itemize}
+
+\section{Linear Regression Algorithm}
+
+The linear regression algorithm can be summarized in the following steps:
+
+\begin{enumerate}
+    \item Initialize the parameters \( \beta_0 \) and \( \beta_1 \) to random values.
+    \item For each iteration:
+    \begin{enumerate}
+        \item Compute the predicted values \( \hat{y} = \beta_0 + \beta_1 x \).
+        \item Calculate the cost function, typically Mean Squared Error (MSE):
+        \[
+        \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+        \]
+        \item Update the parameters using gradient descent:
+        \[
+        \beta_0 := \beta_0 - \alpha \frac{\partial \text{MSE}}{\partial \beta_0}
+        \]
+        \[
+        \beta_1 := \beta_1 - \alpha \frac{\partial \text{MSE}}{\partial \beta_1}
+        \]
+    \end{enumerate}
+    \item Repeat until convergence.
+\end{enumerate}
+
+\section{Conclusion}
+Linear regression is a powerful and widely used technique for modeling the relationship between variables. By understanding its assumptions and how to evaluate its performance, we can effectively apply linear regression to a variety of problems.
+
+\end{document}

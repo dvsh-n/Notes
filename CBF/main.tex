@@ -1,0 +1,363 @@
+\documentclass[12pt]{article}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{amsthm}
+
+\begin{document}
+
+\title{Control Barrier Functions}
+\author{Devesh Nath}
+\date{\today}
+
+\setlength{\parindent}{0pt} % Remove automatic indenting at new paragraphs
+\setlength{\parskip}{\baselineskip} % Add a blank line between paragraphs
+
+\maketitle
+
+\begin{abstract}
+\begin{center}
+A brief overview of Control Barrier Functions.
+\end{center}
+\end{abstract}
+
+\section{Preliminaries}
+\subsection{Safe Set's Invariance}
+Consider a dynamical system given by:
+\[
+\dot{x} = f(x)
+\]
+with \( x \in \mathbb{R}^n \). Assume that the safe set \( C \) is the superlevel set of a smooth function \( h : \mathbb{R}^n \to \mathbb{R} \), i.e.,
+\[
+C = \{ x \in \mathbb{R}^n : h(x) \geq 0 \}
+\]
+and that \( \frac{\partial h}{\partial x} (x) \neq 0 \) for all \( x \) such that \( h(x) = 0 \). 
+
+Nagumo’s Theorem provides necessary and sufficient conditions for set invariance based on the derivative of \( h \) on the boundary of \( C \):
+\[
+C \text{ is invariant} \iff \dot{h}(x) \geq 0 \quad \forall x \in \partial C
+\]
+
+\textcolor{blue}{
+To explain, the theorem states that for the set \( C \) to be invariant under the flow of the dynamical system, the derivative of the function \( h \) with respect to time, \( \dot{h}(x) \), must be non-negative for all points \( x \) on the boundary of \( C \) (denoted as \( \partial C \)). This ensures that the trajectories of the system do not leave the set \( C \), thereby maintaining safety.
+}
+
+\subsection{Barrier Certificates}
+The choice of the term “barrier” was motivated by its use in the optimization literature where barrier functions are added to cost functions to avoid undesirable regions. In the case of barrier certificates, one considers an unsafe set \( C_u \) and a set of initial conditions \( C_0 \) together with a function \( B : \mathbb{R}^n \to \mathbb{R} \) where \( B(x) \leq 0 \) for all \( x \in C_0 \) and \( B(x) > 0 \) for all \( x \in C_u \). Then \( B \) is a barrier certificate if
+\[
+\dot{B}(x) \leq 0 \implies C \text{ is invariant}
+\]
+
+\textcolor{blue}{
+To elaborate, the term "barrier" is used because, similar to optimization problems where barrier functions prevent the solution from entering undesirable regions, barrier certificates ensure safety by preventing the system's state from entering unsafe regions. Specifically, for a given unsafe set \( C_u \) and initial conditions set \( C_0 \), a function \( B \) is defined such that \( B(x) \leq 0 \) for all \( x \in C_0 \) and \( B(x) > 0 \) for all \( x \in C_u \). The function \( B \) acts as a certificate of safety if its time derivative \( \dot{B}(x) \) is non-positive, which implies that the set \( C \) remains invariant and the system's state does not enter the unsafe set \( C_u \).
+}
+
+\textcolor{blue}{
+If \( \dot{B}(x) \leq 0 \), then \( B(x) \) cannot increase. This means that if the system starts in a state where \( B(x) \leq 0 \) (i.e., within the safe set \( C \)), it will remain in states where \( B(x) \leq 0 \) as time progresses. Consequently, the system's state will not enter the unsafe set \( C_u \) (where \( B(x) > 0 \)) because \( B(x) \) cannot increase to become positive.
+}
+
+\subsection{Relation between Safe and Unsafe Sets}
+In the notation for \( C \) above, by picking the safe set to be the complement of the unsafe set \( C = C_u^c \), with \( B(x) = -h(x) \), the barrier certificate conditions become:
+\[
+\dot{h}(x) \geq 0
+\]
+which implies that \( C \) is invariant.
+
+\subsection{Lyapunov Functions as Barrier Functions}
+As a means to extend the safety guarantees beyond the boundary of the set, there have been a variety of approaches that can be best described as “Lyapunov-like.” That is, Lyapunov functions yield invariant level sets so, if these level sets are contained in the safe set one can guarantee safety—importantly, these conditions can be applied over the entire set and not just on the boundary. 
+
+\textcolor{blue}{
+Lyapunov functions are used to prove the stability of equilibrium points in dynamical systems. A Lyapunov function \( V : \mathbb{R}^n \to \mathbb{R} \) is a scalar function that is positive definite and decreases along the trajectories of the system. If \( V(x) \) is positive definite and \( \dot{V}(x) \leq 0 \), then the equilibrium point is stable. The level sets of \( V \) (i.e., the sets where \( V(x) \) is constant) are invariant under the flow of the system.
+}
+
+In this case, one constructs a “barrier Lyapunov function” \( B \) much as above but with the additional requirement that it is, for all intents and purposes, positive definite. Then, by enforcing the condition that \( \dot{B} \leq 0 \) over the set \( C \), it ensures invariance of this set and thus safety. 
+
+\textcolor{blue}{
+A barrier Lyapunov function \( B \) is similar to a Lyapunov function but with an additional requirement that it is positive definite. This means that \( B(x) > 0 \) for all \( x \neq 0 \) and \( B(0) = 0 \). By ensuring that \( \dot{B}(x) \leq 0 \) for all \( x \in C \), we can guarantee that the set \( C \) is invariant. This means that if the system starts in the set \( C \), it will remain in \( C \) for all future times, thereby ensuring safety.
+}
+
+The major limitation is that, while these conditions ensure safety they also enforce invariance of every level set. Thus, they are overly strong and conservative.
+
+\textcolor{blue}{
+The limitation of using barrier Lyapunov functions is that they enforce invariance of every level set of \( B \). This means that not only is the set \( C \) invariant, but every sublevel set of \( B \) is also invariant. This can be overly conservative because it restricts the system's trajectories more than necessary to ensure safety.
+}
+
+\subsection{Building up to Control Barrier Functions}
+The notion of a barrier certificate was extended to a “control” version to yield the first definition of a “control barrier function”. In particular, given a control system and a safe set \( C \) as defined above by a function \( h \), the conditions are effectively:
+\[
+\exists u \text{ s.t. } \dot{h}(x, u) \geq 0 \implies C \text{ is invariant}
+\]
+
+\textcolor{blue}{
+This means that for the set \( C \) to be invariant, there must exist a control input \( u \) such that the time derivative of \( h \) with respect to the system's dynamics is non-negative. This ensures that the system's state remains within the safe set \( C \).
+}
+
+These ideas led to the development of control Lyapunov barrier functions, which unify safety and stability guarantees. However, the condition \( \dot{h}(x, u) \geq 0 \) is often too restrictive, motivating the modern version of control barrier functions.
+
+\textcolor{blue}{
+Control Lyapunov barrier functions combine the properties of Lyapunov functions (ensuring stability) and barrier functions (ensuring safety). However, the condition \( \dot{h}(x, u) \geq 0 \) can be overly restrictive, leading to the development of more relaxed conditions.
+}
+
+The modern formulation of control barrier functions extends traditional barrier conditions to the entire safe set. For a control system and a safe set \( C \) defined by \( h \), a control barrier function satisfies:
+\[
+\exists u \text{ s.t. } \dot{h}(x, u) \geq -\alpha(h(x)) \implies C \text{ is invariant}
+\]
+where \( \alpha \) is a class \( \mathcal{K} \) function. This condition is necessary and sufficient for compact sets, allowing for the synthesis of safe controllers through optimization-based methods that minimally adjust the desired control input.
+
+\textcolor{blue}{
+A function \(\alpha: [0, \infty) \to [0, \infty)\) is called a class \(\mathcal{K}\) function if it satisfies the following properties:
+\begin{itemize}
+    \item \(\alpha\) is continuous,
+    \item \(\alpha\) is strictly increasing,
+    \item \(\alpha(0) = 0\).
+\end{itemize}
+}
+
+\textcolor{blue}{
+The modern definition of control barrier functions requires that there exists a control input \( u \) such that the time derivative of \( h \) is greater than or equal to \(-\alpha(h(x))\), where \( \alpha \) is a class \( \mathcal{K} \) function. This condition is both necessary and sufficient for the invariance of the set \( C \), making it minimally restrictive. This allows for the synthesis of safe controllers using optimization-based methods that minimally alter the desired control input to ensure safety.
+}
+
+\section{Control Barrier Functions}
+Consider a nonlinear affine control system given by:
+\[
+\dot{x} = f(x) + g(x)u
+\]
+where \( f \) and \( g \) are locally Lipschitz continuous functions, \( x \in D \subset \mathbb{R}^n \), and \( u \in U \subset \mathbb{R}^m \) is the set of admissible inputs.
+
+\subsection{Motivation: Control Lyapunov Functions}
+Suppose we have the control objective of asymptotically stabilizing the nonlinear control system to a point \( x^* = 0 \), i.e., driving \( x(t) \to 0 \). In a nonlinear context, this can be achieved by finding a feedback control law that drives a positive definite function \( V : D \subset \mathbb{R}^n \to \mathbb{R}_{\geq 0} \) to zero. That is, if
+\[
+\exists u = k(x) \text{ s.t. } \dot{V}(x, k(x)) \leq -\gamma(V(x)),
+\]
+where
+\[
+\dot{V}(x, k(x)) = L_f V(x) + L_g V(x) k(x),
+\]
+\textcolor{blue}{Here, \( L_f V(x) \) and \( L_g V(x) \) are the Lie derivatives of the function \( V \) along the vector fields \( f \) and \( g \), respectively. Specifically, \( L_f V(x) \) represents the rate of change of \( V \) along the trajectories of the system defined by \( \dot{x} = f(x) \), and \( L_g V(x) \) represents the rate of change of \( V \) along the trajectories defined by \( \dot{x} = g(x) \). These Lie derivatives help in understanding how the function \( V \) evolves over time under the influence of the system dynamics and the control input.}
+
+then the system is stabilizable to \( V(x^*) = 0 \), i.e., \( x^* = 0 \). Note that here \( \gamma : \mathbb{R}_{\geq 0} \to \mathbb{R}_{\geq 0} \) is a class \( \mathcal{K} \) function defined on the entire real line for simplicity, i.e., \( \gamma \) maps zero to zero, \( \gamma(0) = 0 \), and it is strictly monotonic: for all \( r_1, r_2 \in \mathbb{R}_{\geq 0} \), \( r_1 < r_2 \) implies that \( \gamma(r_1) < \gamma(r_2) \). Thus, the process of stabilizing a nonlinear system can be understood as finding an input that creates a one-dimensional stable system given by the Lyapunov function: \( \dot{V} \leq -\gamma(V) \), wherein the comparison lemma implies that the full-order nonlinear system is thus stable under the control law \( u = k(x) \).
+
+\textcolor{blue}{
+The above observations motivate the notion of a control Lyapunov function wherein a function \( V \) is shown to stabilize the system without the need to explicitly construct the feedback controller \( u = k(x) \). That is, we only need a controller to exist that results in the desired inequality on \( \dot{V} \). Concretely, \( V \) is a control Lyapunov function (CLF) if it is positive definite and satisfies:
+\[
+\inf_{u \in U} [L_f V(x) + L_g V(x) u] \leq -\gamma(V(x)),
+\]
+where \( \gamma \) is again a class \( \mathcal{K} \) function. The importance of this definition is that it allows us to consider the set of all stabilizing controllers for every point \( x \in D \):
+\[
+K_{\text{clf}}(x) := \{ u \in U : L_f V(x) + L_g V(x) u \leq -\gamma(V(x)) \}.
+\]
+}
+\textcolor{blue}{
+$K_{clf}(x)$ is the set of stabilizing controls. 
+}
+
+This is an affine constraint in \( u \) and thus will allow for the formulation of optimization-based controllers. It also elucidates conditions on when \( V \) is a CLF; for example, if \( U = \mathbb{R}^m \), it is easy to verify that
+\[
+L_g V(x) = 0 \implies L_f V(x) \leq -\gamma(V(x)) \implies K_{\text{clf}}(x) \neq \emptyset
+\]
+and thus there are stabilizing controllers. More generally, we have the following central stabilization result for CLFs:
+
+\textcolor{blue}{
+If \( L_g V(x) = 0 \), it means that the Lie derivative of \( V \) along the vector field \( g \) is zero. This implies that the control input \( u \) does not affect the rate of change of \( V \). In other words, the function \( V \) evolves solely according to the dynamics defined by \( f(x) \). Therefore, the inequality \( L_f V(x) \leq -\gamma(V(x)) \) must hold for the system to be stabilizable without any control input. This ensures that the set of stabilizing controllers \( K_{\text{clf}}(x) \) is non-empty, as the system can be stabilized by the natural dynamics alone.
+}
+
+\newtheorem{theorem}{Theorem}
+
+\begin{theorem}
+For the nonlinear control system \( \dot{x} = f(x) + g(x)u \), if there exists a control Lyapunov function \( V : D \to \mathbb{R}_{\geq 0} \), i.e., a positive definite function satisfying (3), then any Lipschitz continuous feedback controller \( u(x) \in K_{\text{clf}}(x) \) asymptotically stabilizes the system to \( x^* = 0 \).
+\end{theorem}
+
+
+\textbf{Safe Set.}
+We consider a set \( C \) defined as the superlevel set of a continuously differentiable function \( h : D \subset \mathbb{R}^n \to \mathbb{R} \), yielding:
+\[
+C = \{ x \in D \subset \mathbb{R}^n : h(x) \geq 0 \},
+\]
+\[
+\partial C = \{ x \in D \subset \mathbb{R}^n : h(x) = 0 \},
+\]
+\[
+\text{Int}(C) = \{ x \in D \subset \mathbb{R}^n : h(x) > 0 \}.
+\]
+We refer to \( C \) as the safe set.
+
+\textbf{Safety}
+Let \( u = k(x) \) be a feedback controller such that the resulting dynamical system
+\[
+\dot{x} = f_{\text{cl}}(x) := f(x) + g(x)k(x)
+\]
+is locally Lipschitz. To formally define safety, due to the locally Lipschitz assumption, for any initial condition \( x_0 \in D \) there exists a maximum interval of existence \( I(x_0) = [0, \tau_{\max}) \) such that \( x(t) \) is the unique solution to the above equation on \( I(x_0) \); in the case when \( f_{\text{cl}} \) is forward complete, \( \tau_{\max} = \infty \). 
+
+\textcolor{blue}{
+This helps us define safety because it ensures that for any initial condition within the domain \( D \), there exists a unique solution to the system's dynamics over a maximum interval of time. If the system is forward complete, the solution exists for all future times. This guarantees that the system's behavior is predictable and well-defined, which is a prerequisite for ensuring that the system remains within a safe set \( C \) over time.
+}
+
+\newtheorem{definition}{Definition}
+
+\begin{definition}
+The set \( C \) is forward invariant if for every \( x_0 \in C \), \( x(t) \in C \) for \( x(0) = x_0 \) and all \( t \in I(x_0) \). The system is safe with respect to the set \( C \) if the set \( C \) is forward invariant.
+\end{definition}
+
+\subsection{Control Barrier Functions}
+Using control Lyapunov functions (CLFs) as motivation, we wish to generalize to the concept of safety. However, one must be careful about directly generalizing Lyapunov functions. If there exists a CLF \( V \) such that \( V(x) = 0 \implies x \in C \) and \( V \) has a superlevel set \( \Omega_c = \{ x \in D : V(x) \leq c \} \subset C \), then the corresponding controllers will render \( \Omega_c \) invariant, and hence \( C \) safe. Nevertheless, this is overly restrictive as it would render every sublevel set invariant, i.e., \( \Omega_{c'} \) for all \( c' < c \). 
+
+Rather, we wish to enforce set invariance without requiring a positive definite function. For \( h \) to be a control barrier function (CBF), it should render \( C \) invariant but not its sublevel sets. This allows for more flexibility in ensuring safety without the overly conservative constraints imposed by CLFs.
+
+\textcolor{blue}{
+If a sublevel set is invariant, the system is restricted to stay there, that is why it gets restrictive. A CBF only has invariance under C which relaxes the constraints.
+}
+
+\textbf{Class \( \mathcal{K}_\infty \) Functions.}
+An extended class \( \mathcal{K}_\infty \) function is a function \( \alpha : \mathbb{R} \to \mathbb{R} \) that is strictly increasing and satisfies \( \alpha(0) = 0 \). Unlike class \( \mathcal{K} \) functions, which are defined on \([0, \infty)\), extended class \( \mathcal{K}_\infty \) functions are defined on the entire real line \(\mathbb{R} = (-\infty, \infty)\).
+
+\begin{definition}
+Let \( C \subset D \subset \mathbb{R}^n \) be the superlevel set of a continuously differentiable function \( h : D \to \mathbb{R} \). Then \( h \) is a \textbf{control barrier function (CBF)} if there exists an extended class \( \mathcal{K}_\infty \) function \( \alpha \) such that for the control system:
+\[
+\sup_{u \in U} [L_f h(x) + L_g h(x) u] \geq -\alpha(h(x))
+\]
+for all \( x \in D \).
+\end{definition}
+
+\textbf{Guaranteed Safety via Control Barrier Functions:}
+We consider the set of control values that render \( C \) safe:
+\[
+K_{\text{cbf}}(x) = \{ u \in U : L_f h(x) + L_g h(x) u + \alpha(h(x)) \geq 0 \}.
+\]
+As in the case of control Lyapunov functions, this set quantifies all control inputs at a point \( x \in D \) that keep the system safe. The main result regarding control barrier functions is that the existence of a control barrier function implies the control system is safe.
+
+\subsection{Optimization Based Control}
+Having established that control barrier functions give necessary and sufficient conditions on safety, the question becomes: how does one synthesize controllers? Importantly, we wish to do so in a minimally invasive fashion, i.e., modify an existing controller in a minimal way so as to guarantee safety. This naturally leads to optimization-based controllers.
+
+\textbf{Safety-Critical Control:}
+Suppose we are given a feedback controller \( u = k(x) \) for the control system and we wish to guarantee safety. Yet it may be the case that \( k(x) \notin K_{\text{cbf}}(x) \) for some \( x \in D \). To modify this controller in a minimal way so as to guarantee safety, we start by noticing that the conditions on safety given are affine in \( u \). Thus, we can consider the following Quadratic Program (QP) based controller that finds the minimum perturbation on \( u \):
+\[
+u(x) = \arg\min_{u \in \mathbb{R}^m} \frac{1}{2} \|u - k(x)\|^2
+\]
+subject to
+\[
+L_f h(x) + L_g h(x) u \geq -\alpha(h(x))
+\]
+\textcolor{blue}{
+This optimization problem modifies the existing controller \( k(x) \) in a minimal way to ensure safety by solving a QP. The objective is to minimize the difference between the new control input \( u \) and the original control input \( k(x) \), subject to the safety constraint.
+}
+
+\textbf{Unifying with Lyapunov:}
+The QP-based formulation of safety-critical controllers suggests a means to unify safety and stability. Optimization-based controllers were first utilized in the context of CLFs for multi-objective nonlinear control. Concretely, we consider the following QP-based controller:
+\[
+u(x) = \arg\min_{(u, \delta) \in \mathbb{R}^m \times \mathbb{R}} \frac{1}{2} u^T H(x) u + p \delta^2
+\]
+subject to
+\[
+L_f V(x) + L_g V(x) u \leq -\gamma(V(x)) + \delta
+\]
+\[
+L_f h(x) + L_g h(x) u \geq -\alpha(h(x))
+\]
+\textcolor{blue}{
+Here, \( H(x) \) is any positive definite matrix, and \( \delta \) is a relaxation variable that ensures the solvability of the QP. The term \( p \delta^2 \) penalizes the relaxation, ensuring that the stability condition is relaxed only as much as necessary to guarantee safety.
+}
+
+\section{Examples}
+\subsection{Definition of Control Barrier Functions}
+A function \( h : \mathbb{R}^n \to \mathbb{R} \) is called a Control Barrier Function (CBF) for the system if there exists an extended class \( \mathcal{K} \) function \( \alpha \) such that for all \( x \in D \),
+\[
+\sup_{u \in U} \left[ \frac{\partial h}{\partial x} (f(x) + g(x)u) \right] \geq -\alpha(h(x))
+\]
+This condition ensures that the set \( C = \{ x \in \mathbb{R}^n : h(x) \geq 0 \} \) is forward invariant, meaning that if the system starts in \( C \), it will remain in \( C \) for all future times. The following examples illustrate how CBFs are applied to different dynamical systems to ensure safety.
+
+\subsection{Synthesis of Safe Controllers}
+To synthesize a controller that ensures safety, one can solve the following optimization problem at each time step:
+\[
+\begin{aligned}
+& \min_u \quad & \| u - u_{\text{des}} \|^2 \\
+& \text{subject to} \quad & \frac{\partial h}{\partial x} (f(x) + g(x)u) \geq -\alpha(h(x))
+\end{aligned}
+\]
+where \( u_{\text{des}} \) is the desired control input. This optimization problem finds the control input \( u \) that is closest to the desired input \( u_{\text{des}} \) while ensuring that the safety condition is satisfied. The subsequent examples demonstrate the implementation of this optimization-based approach in specific scenarios.
+
+\subsection{Example 1: Simple Harmonic Oscillator}
+Consider a simple harmonic oscillator described by the differential equation:
+\[
+\ddot{x} + \omega^2 x = 0
+\]
+where \( \omega \) is the natural frequency of the oscillator. We can rewrite this as a first-order system:
+\[
+\begin{aligned}
+\dot{x}_1 &= x_2 \\
+\dot{x}_2 &= -\omega^2 x_1
+\end{aligned}
+\]
+Let \( x = [x_1, x_2]^T \). The system can be written in matrix form as:
+\[
+\dot{x} = \begin{bmatrix}
+0 & 1 \\
+-\omega^2 & 0
+\end{bmatrix} x
+\]
+To ensure that the state \( x \) remains within a safe set \( C \), we can define a control barrier function \( h(x) \). For example, let:
+\[
+h(x) = 1 - \frac{x_1^2}{a^2} - \frac{x_2^2}{b^2}
+\]
+where \( a \) and \( b \) are positive constants defining the shape of the safe set. The safe set \( C \) is then given by:
+\[
+C = \{ x \in \mathbb{R}^2 : h(x) \geq 0 \}
+\]
+The time derivative of \( h(x) \) along the trajectories of the system is:
+\[
+\dot{h}(x) = \frac{\partial h}{\partial x} \dot{x} = \begin{bmatrix}
+-\frac{2x_1}{a^2} & -\frac{2x_2}{b^2}
+\end{bmatrix} \begin{bmatrix}
+x_2 \\
+-\omega^2 x_1
+\end{bmatrix} = -\frac{2x_1 x_2}{a^2} - \frac{2x_2 (-\omega^2 x_1)}{b^2}
+\]
+Simplifying, we get:
+\[
+\dot{h}(x) = -\frac{2x_1 x_2}{a^2} + \frac{2\omega^2 x_1 x_2}{b^2}
+\]
+To ensure that \( \dot{h}(x) \geq -\alpha(h(x)) \), where \( \alpha \) is a class \( \mathcal{K} \) function, we can choose \( \alpha(h(x)) = \lambda h(x) \) for some positive constant \( \lambda \). Thus, the condition becomes:
+\[
+-\frac{2x_1 x_2}{a^2} + \frac{2\omega^2 x_1 x_2}{b^2} \geq -\lambda \left(1 - \frac{x_1^2}{a^2} - \frac{x_2^2}{b^2}\right)
+\]
+This inequality can be used to design a controller that ensures the system remains within the safe set \( C \).
+
+\subsection{Example 2: Inverted Pendulum}
+Consider an inverted pendulum on a cart, described by the equations:
+\[
+\begin{aligned}
+\dot{\theta} &= \omega \\
+\dot{\omega} &= \frac{g}{l} \sin(\theta) + \frac{u}{ml^2} \cos(\theta)
+\end{aligned}
+\]
+where \( \theta \) is the angle of the pendulum, \( \omega \) is the angular velocity, \( g \) is the acceleration due to gravity, \( l \) is the length of the pendulum, \( m \) is the mass of the pendulum, and \( u \) is the control input (force applied to the cart). Let \( x = [\theta, \omega]^T \). The system can be written as:
+\[
+\dot{x} = \begin{bmatrix}
+\omega \\
+\frac{g}{l} \sin(\theta) + \frac{u}{ml^2} \cos(\theta)
+\end{bmatrix}
+\]
+To ensure that the pendulum remains upright, we can define a control barrier function \( h(x) \). For example, let:
+\[
+h(x) = \cos(\theta) - \cos(\theta_{\max})
+\]
+where \( \theta_{\max} \) is the maximum allowable deviation from the upright position. The safe set \( C \) is then given by:
+\[
+C = \{ x \in \mathbb{R}^2 : h(x) \geq 0 \}
+\]
+The time derivative of \( h(x) \) along the trajectories of the system is:
+\[
+\dot{h}(x) = \frac{\partial h}{\partial x} \dot{x} = \begin{bmatrix}
+-\sin(\theta) & 0
+\end{bmatrix} \begin{bmatrix}
+\omega \\
+\frac{g}{l} \sin(\theta) + \frac{u}{ml^2} \cos(\theta)
+\end{bmatrix} = -\omega \sin(\theta)
+\]
+To ensure that \( \dot{h}(x) \geq -\alpha(h(x)) \), where \( \alpha \) is a class \( \mathcal{K} \) function, we can choose \( \alpha(h(x)) = \lambda h(x) \) for some positive constant \( \lambda \). Thus, the condition becomes:
+\[
+-\omega \sin(\theta) \geq -\lambda (\cos(\theta) - \cos(\theta_{\max}))
+\]
+This inequality can be used to design a controller that ensures the pendulum remains within the safe set \( C \).
+
+\end{document}
