@@ -1,0 +1,77 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{graphicx}
+
+\title{K-Nearest Neighbors (KNN) Algorithm}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+K-Nearest Neighbors (KNN) is a simple, instance-based learning algorithm used for classification and regression tasks. It is a non-parametric method, meaning it makes no assumptions about the underlying data distribution.
+
+\section{Algorithm}
+The KNN algorithm works as follows:
+\begin{enumerate}
+    \item Choose the number of neighbors \( k \).
+    \item Calculate the distance between the query instance and all the training samples.
+    \item Select the \( k \) nearest neighbors based on the calculated distances.
+    \item For classification, assign the class label that is most frequent among the \( k \) nearest neighbors. For regression, compute the average of the values of the \( k \) nearest neighbors.
+\end{enumerate}
+
+\section{Distance Metrics}
+Common distance metrics used in KNN include:
+\begin{itemize}
+    \item \textbf{Euclidean Distance:} \( d(p, q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2} \)
+    \item \textbf{Manhattan Distance:} \( d(p, q) = \sum_{i=1}^{n} |p_i - q_i| \)
+    \item \textbf{Minkowski Distance:} \( d(p, q) = \left( \sum_{i=1}^{n} |p_i - q_i|^p \right)^{1/p} \)
+\end{itemize}
+
+\section{Advantages and Disadvantages}
+\subsection{Advantages}
+\begin{itemize}
+    \item Simple to implement and understand.
+    \item No training phase, making it fast for small datasets.
+    \item Can be used for both classification and regression tasks.
+\end{itemize}
+
+\subsection{Disadvantages}
+\begin{itemize}
+    \item Computationally expensive for large datasets.
+    \item Performance depends on the choice of \( k \) and the distance metric.
+    \item Sensitive to irrelevant or redundant features.
+\end{itemize}
+\section{Implementation}
+Here is a simple implementation of the KNN algorithm in pseudocode:
+
+\begin{algorithm}
+    \caption{K-Nearest Neighbors (KNN) Algorithm}\label{alg:knn}
+    \KwIn{Training data: $\{(\mathbf{x}_i, y_i)\}_{i=1}^N$, Test point: $\mathbf{x}$, Number of neighbors: $k$}
+    \KwOut{Predicted label $\hat{y}$ for test point $\mathbf{x}$}
+    
+    \For{$i \gets 1$ \KwTo $N$}{
+        Compute distance $d_i = \|\mathbf{x} - \mathbf{x}_i\|$\;
+    }
+    Sort the distances $\{d_i\}_{i=1}^N$ in ascending order and obtain indices of the $k$ smallest distances: $\{i_1, i_2, \ldots, i_k\}$\;
+    \For{$j \gets 1$ \KwTo $k$}{
+        Retrieve the label $y_{i_j}$ of the $j$-th nearest neighbor\;
+    }
+    \If{classification}{
+        $\hat{y} \gets \text{mode}\{y_{i_1}, y_{i_2}, \ldots, y_{i_k}\}$\;
+    }
+    \ElseIf{regression}{
+        $\hat{y} \gets \frac{1}{k} \sum_{j=1}^k y_{i_j}$\;
+    }
+    \Return $\hat{y}$\;
+    
+\end{algorithm}
+
+\section{Conclusion}
+KNN is a versatile and intuitive algorithm that can be applied to various machine learning tasks. However, its performance can be significantly affected by the choice of \( k \), the distance metric, and the presence of noisy or irrelevant features.
+
+\end{document}

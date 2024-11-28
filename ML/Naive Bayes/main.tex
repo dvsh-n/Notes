@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[ruled,vlined]{algorithm2e}
+
+\title{Naive Bayes}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Naive Bayes is a family of simple probabilistic classifiers based on applying Bayes' theorem with strong (naive) independence assumptions between the features. It is highly scalable, requiring a number of parameters linear in the number of features in a learning problem.
+
+\section{Bayes' Theorem}
+Bayes' theorem describes the probability of an event, based on prior knowledge of conditions that might be related to the event. The theorem is stated mathematically as:
+
+\[
+P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}
+\]
+
+where:
+\begin{itemize}
+    \item \( P(A|B) \) is the posterior probability of class \( A \) given predictor \( B \).
+    \item \( P(B|A) \) is the likelihood which is the probability of predictor \( B \) given class \( A \).
+    \item \( P(A) \) is the prior probability of class \( A \).
+    \item \( P(B) \) is the prior probability of predictor \( B \).
+\end{itemize}
+
+\section{Naive Assumption}
+The "naive" assumption of Naive Bayes is that all features are independent of each other given the class. This simplifies the computation of the posterior probability by assuming:
+
+\[
+P(X_1, X_2, \ldots, X_n | Y) = P(X_1 | Y) \cdot P(X_2 | Y) \cdots P(X_n | Y)
+\]
+
+\section{Types of Naive Bayes Classifiers}
+There are several types of Naive Bayes classifiers, including:
+\begin{itemize}
+    \item \textbf{Gaussian Naive Bayes}: Assumes that the continuous values associated with each feature are distributed according to a Gaussian (normal) distribution.
+    \item \textbf{Multinomial Naive Bayes}: Used for discrete counts, such as word counts in text classification.
+    \item \textbf{Bernoulli Naive Bayes}: Used for binary/boolean features.
+\end{itemize}
+
+\section{Algorithm}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Training data \( D = \{(x_1, y_1), (x_2, y_2), \ldots, (x_n, y_n)\} \)}
+\KwOut{A Naive Bayes model}
+
+\For{each class \( c \) in the dataset}{
+    Calculate the prior probability \( P(c) \)
+}
+
+\For{each feature \( f \)}{
+    \For{each class \( c \)}{
+        Calculate the likelihood \( P(f|c) \)
+    }
+}
+
+\caption{Training a Naive Bayes Classifier}
+\end{algorithm}
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{A Naive Bayes model, new data point \( x \)}
+\KwOut{Predicted class \( \hat{y} \)}
+
+\For{each class \( c \)}{
+    Initialize \( P(c|x) = P(c) \)
+    \For{each feature \( f \) in \( x \)}{
+        Update \( P(c|x) \) with \( P(f|c) \)
+    }
+}
+
+\Return{class \( c \) with highest \( P(c|x) \)}
+
+\caption{Inference with a Naive Bayes Classifier}
+\end{algorithm}
+\section{Applications}
+Naive Bayes classifiers are used in various applications such as:
+\begin{itemize}
+    \item Spam filtering
+    \item Text classification
+    \item Sentiment analysis
+    \item Recommender systems
+\end{itemize}
+
+\section{Conclusion}
+Naive Bayes is a simple yet powerful algorithm for classification tasks. Its strong independence assumptions may not always hold, but it often performs surprisingly well in practice, especially for text classification problems.
+
+\end{document}
