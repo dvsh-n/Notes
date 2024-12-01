@@ -87,6 +87,33 @@ def quick_sort(arr):
 # Time Complexity: O(n log n) on average, O(n^2) in the worst case
 # Space Complexity: O(log n)
 
+# Bucket Sort
+def bucket_sort(arr):
+    if len(arr) == 0:
+        return arr
+
+    bucket_count = len(arr)
+    max_value = max(arr)
+    min_value = min(arr)
+
+    # Create buckets
+    buckets = [[] for _ in range(bucket_count)]
+
+    # Distribute input array values into buckets
+    for num in arr:
+        index = int((num - min_value) / (max_value - min_value + 1) * bucket_count)
+        buckets[index].append(num)
+
+    # Sort individual buckets and concatenate
+    sorted_array = []
+    for bucket in buckets:
+        sorted_array.extend(sorted(bucket))
+
+    return sorted_array
+
+# Time Complexity: O(n + k)
+# Space Complexity: O(n + k)
+
 # Example usage
 if __name__ == "__main__":
     example_array = [64, 34, 25, 12, 22, 11, 90]
