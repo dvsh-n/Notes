@@ -136,6 +136,16 @@ where
 \]
 \textcolor{blue}{Here, \( L_f V(x) \) and \( L_g V(x) \) are the Lie derivatives of the function \( V \) along the vector fields \( f \) and \( g \), respectively. Specifically, \( L_f V(x) \) represents the rate of change of \( V \) along the trajectories of the system defined by \( \dot{x} = f(x) \), and \( L_g V(x) \) represents the rate of change of \( V \) along the trajectories defined by \( \dot{x} = g(x) \). These Lie derivatives help in understanding how the function \( V \) evolves over time under the influence of the system dynamics and the control input.}
 
+\textcolor{blue}{
+Geometrically:
+\begin{itemize}
+    \item If \(\dot{V}(x) < -\gamma(V(x))\), the energy dissipation is faster than required, meaning the trajectory is descending "steeply" across level sets of \(V(x)\).
+    \item If \(\dot{V}(x) = -\gamma(V(x))\), the trajectory is exactly on the boundary where the dissipation matches the control objective.
+    \item If \(\dot{V}(x) > -\gamma(V(x))\) (e.g., approaching zero), the dissipation slows down, and stabilization may not be asymptotic.
+\end{itemize}
+Control Lyapunov Functions guarantee that the system's energy decreases at a rate that is at least as fast as required for stabilization.
+}
+
 then the system is stabilizable to \( V(x^*) = 0 \), i.e., \( x^* = 0 \). Note that here \( \gamma : \mathbb{R}_{\geq 0} \to \mathbb{R}_{\geq 0} \) is a class \( \mathcal{K} \) function defined on the entire real line for simplicity, i.e., \( \gamma \) maps zero to zero, \( \gamma(0) = 0 \), and it is strictly monotonic: for all \( r_1, r_2 \in \mathbb{R}_{\geq 0} \), \( r_1 < r_2 \) implies that \( \gamma(r_1) < \gamma(r_2) \). Thus, the process of stabilizing a nonlinear system can be understood as finding an input that creates a one-dimensional stable system given by the Lyapunov function: \( \dot{V} \leq -\gamma(V) \), wherein the comparison lemma implies that the full-order nonlinear system is thus stable under the control law \( u = k(x) \).
 
 \textcolor{blue}{
@@ -258,106 +268,88 @@ L_f h(x) + L_g h(x) u \geq -\alpha(h(x))
 Here, \( H(x) \) is any positive definite matrix, and \( \delta \) is a relaxation variable that ensures the solvability of the QP. The term \( p \delta^2 \) penalizes the relaxation, ensuring that the stability condition is relaxed only as much as necessary to guarantee safety.
 }
 
-\section{Examples}
-\subsection{Definition of Control Barrier Functions}
-A function \( h : \mathbb{R}^n \to \mathbb{R} \) is called a Control Barrier Function (CBF) for the system if there exists an extended class \( \mathcal{K} \) function \( \alpha \) such that for all \( x \in D \),
+\section{CBFs for Systems with Actuation Constraints}
+\subsection{The Allowable Set \( A \)}
+The allowable set \( A \) is defined as:
 \[
-\sup_{u \in U} \left[ \frac{\partial h}{\partial x} (f(x) + g(x)u) \right] \geq -\alpha(h(x))
+A = \{ x \in D \mid \rho(x) \geq 0 \},
 \]
-This condition ensures that the set \( C = \{ x \in \mathbb{R}^n : h(x) \geq 0 \} \) is forward invariant, meaning that if the system starts in \( C \), it will remain in \( C \) for all future times. The following examples illustrate how CBFs are applied to different dynamical systems to ensure safety.
+where \( \rho(x) \) is a performance function that quantifies whether a state \( x \) lies in the allowable set. Specifically:
+\begin{itemize}
+    \item \( \rho(x) > 0 \): The state \( x \) is strictly within the allowable set.
+    \item \( \rho(x) = 0 \): The state \( x \) is on the boundary of \( A \).
+    \item \( \rho(x) < 0 \): The state \( x \) is outside the allowable set.
+\end{itemize}
+The goal is to ensure the system remains within this set. However, direct enforcement of invariance on \( A \) may not be possible due to limitations in the system dynamics or actuation constraints.
 
-\subsection{Synthesis of Safe Controllers}
-To synthesize a controller that ensures safety, one can solve the following optimization problem at each time step:
+\subsection{Motivation for Constructing a Safe Subset \( C \)}
+If the allowable set \( A \) cannot be made invariant, we aim to construct a safe subset \( C \), defined as the superlevel set of a Control Barrier Function \( h(x) \):
+\[
+C = \{ x \in D \mid h(x) \geq 0 \}.
+\]
+This subset \( C \) must satisfy \( C \subseteq A \), meaning the safe set \( C \) is fully contained within the allowable set \( A \). Thus, we need a function \( h(x) \) that ensures the system remains within \( C \), even if \( A \) cannot be rendered invariant globally.
+
+\subsection{The Role of the Nominal Controller \( \beta \)}
+A nominal control strategy \( \beta : D \to U \), called an evading maneuver, is assumed to be known. Intuitively:
+\begin{itemize}
+    \item \( \beta \) is a "best-effort" controller that attempts to keep the system in the allowable set \( A \).
+    \item However, there are no guarantees that \( \beta \) can keep the system in \( A \) indefinitely under all circumstances.
+\end{itemize}
+The system trajectory under \( \beta \) is denoted as \( \varphi_\beta(t, x) \), where:
+\[
+\dot{\varphi}_\beta(t, x) = f(\varphi_\beta(t, x)) + g(\varphi_\beta(t, x)) \beta(\varphi_\beta(t, x)),
+\]
+and \( \varphi_\beta(0, x) = x \). This trajectory represents the evolution of the system starting from \( x \) under the nominal controller \( \beta \).
+
+\subsection{Constructing the Barrier Function \( h(x) \)}
+To construct a barrier function \( h(x) \) that guarantees safety, we evaluate the worst-case performance of \( \rho \) along the trajectory \( \varphi_\beta(t, x) \) under the nominal controller \( \beta \). Specifically:
+\[
+h(x) = \inf_{\tau \in [0, \infty)} \rho(\varphi_\beta(\tau, x)).
+\]
+Here’s the intuition behind this definition:
+\begin{itemize}
+    \item The trajectory \( \varphi_\beta(\tau, x) \) evolves over time starting from \( x \) under the nominal controller \( \beta \).
+    \item Along this trajectory, the function \( \rho(\varphi_\beta(\tau, x)) \) measures how "close" the system is to violating the allowable set \( A \).
+    \item The infimum of \( \rho \) over all future times \( \tau \in [0, \infty) \) identifies the worst-case value of \( \rho \) along the trajectory. This is the smallest value that \( \rho \) will attain.
+    \item If \( h(x) \geq 0 \), the system trajectory under \( \beta \) will remain in the allowable set \( A \) or at least not violate it.
+    \item If \( h(x) < 0 \), the trajectory under \( \beta \) will eventually exit \( A \), indicating that \( x \) is not safe under the nominal controller.
+\end{itemize}
+Thus, \( h(x) \) effectively measures how "safe" the state \( x \) is based on the performance of the nominal controller \( \beta \).
+
+\subsection{Polynomial Parameterization and Sums-of-Squares (SOS) Programming}
+To overcome the computational challenges of direct simulation, an alternative approach is to parameterize \( h(x) \) as a polynomial function of a given degree and enforce the required CBF conditions using Sums-of-Squares (SOS) programming.
+
+\subsubsection{Polynomial Parameterization}
+Assume \( h(x) \) takes the form of a polynomial of fixed degree, e.g.:
+\[
+h(x) = \sum_{i=1}^N c_i \phi_i(x),
+\]
+where \( \phi_i(x) \) are polynomial basis functions and \( c_i \) are the coefficients to be determined.
+
+\subsubsection{Sums-of-Squares (SOS) Polynomials}
+A polynomial \( s(x) \) is said to be a SOS polynomial if it can be written as:
+\[
+s(x) = \sum_{i=1}^r (g_i(x))^2,
+\]
+where \( g_i(x) \) are polynomials. Intuitively, SOS polynomials are always non-negative since they are sums of squared terms.
+
+\subsubsection{SOS Programming for CBFs}
+Using SOS programming, one can enforce the CBF conditions (e.g., \( h(x) \geq 0 \) and the derivative condition involving \( \alpha(h(x)) \)) in a computationally tractable way. Specifically:
+\begin{itemize}
+    \item Express the conditions for \( h(x) \) (e.g., \( L_f h(x) + L_g h(x) u \geq -\alpha(h(x)) \)) in polynomial form.
+    \item Use SOS constraints to ensure these conditions are satisfied globally or locally within a domain \( D \).
+\end{itemize}
+
+\subsubsection{SOS Programming Optimization}
+SOS programming allows you to search for the coefficients \( c_i \) of the polynomial \( h(x) \) such that it satisfies the required conditions:
 \[
 \begin{aligned}
-& \min_u \quad & \| u - u_{\text{des}} \|^2 \\
-& \text{subject to} \quad & \frac{\partial h}{\partial x} (f(x) + g(x)u) \geq -\alpha(h(x))
+& \text{Find } h(x) = \text{polynomial such that:} \\
+& h(x) \geq 0 \quad (\text{safety condition}) \\
+& L_f h(x) + L_g h(x) u \geq -\alpha(h(x)) \quad (\text{CBF condition})
 \end{aligned}
 \]
-where \( u_{\text{des}} \) is the desired control input. This optimization problem finds the control input \( u \) that is closest to the desired input \( u_{\text{des}} \) while ensuring that the safety condition is satisfied. The subsequent examples demonstrate the implementation of this optimization-based approach in specific scenarios.
+This optimization can be solved efficiently using semidefinite programming (SDP) tools, as SOS constraints can be represented as linear matrix inequalities (LMIs).
 
-\subsection{Example 1: Simple Harmonic Oscillator}
-Consider a simple harmonic oscillator described by the differential equation:
-\[
-\ddot{x} + \omega^2 x = 0
-\]
-where \( \omega \) is the natural frequency of the oscillator. We can rewrite this as a first-order system:
-\[
-\begin{aligned}
-\dot{x}_1 &= x_2 \\
-\dot{x}_2 &= -\omega^2 x_1
-\end{aligned}
-\]
-Let \( x = [x_1, x_2]^T \). The system can be written in matrix form as:
-\[
-\dot{x} = \begin{bmatrix}
-0 & 1 \\
--\omega^2 & 0
-\end{bmatrix} x
-\]
-To ensure that the state \( x \) remains within a safe set \( C \), we can define a control barrier function \( h(x) \). For example, let:
-\[
-h(x) = 1 - \frac{x_1^2}{a^2} - \frac{x_2^2}{b^2}
-\]
-where \( a \) and \( b \) are positive constants defining the shape of the safe set. The safe set \( C \) is then given by:
-\[
-C = \{ x \in \mathbb{R}^2 : h(x) \geq 0 \}
-\]
-The time derivative of \( h(x) \) along the trajectories of the system is:
-\[
-\dot{h}(x) = \frac{\partial h}{\partial x} \dot{x} = \begin{bmatrix}
--\frac{2x_1}{a^2} & -\frac{2x_2}{b^2}
-\end{bmatrix} \begin{bmatrix}
-x_2 \\
--\omega^2 x_1
-\end{bmatrix} = -\frac{2x_1 x_2}{a^2} - \frac{2x_2 (-\omega^2 x_1)}{b^2}
-\]
-Simplifying, we get:
-\[
-\dot{h}(x) = -\frac{2x_1 x_2}{a^2} + \frac{2\omega^2 x_1 x_2}{b^2}
-\]
-To ensure that \( \dot{h}(x) \geq -\alpha(h(x)) \), where \( \alpha \) is a class \( \mathcal{K} \) function, we can choose \( \alpha(h(x)) = \lambda h(x) \) for some positive constant \( \lambda \). Thus, the condition becomes:
-\[
--\frac{2x_1 x_2}{a^2} + \frac{2\omega^2 x_1 x_2}{b^2} \geq -\lambda \left(1 - \frac{x_1^2}{a^2} - \frac{x_2^2}{b^2}\right)
-\]
-This inequality can be used to design a controller that ensures the system remains within the safe set \( C \).
-
-\subsection{Example 2: Inverted Pendulum}
-Consider an inverted pendulum on a cart, described by the equations:
-\[
-\begin{aligned}
-\dot{\theta} &= \omega \\
-\dot{\omega} &= \frac{g}{l} \sin(\theta) + \frac{u}{ml^2} \cos(\theta)
-\end{aligned}
-\]
-where \( \theta \) is the angle of the pendulum, \( \omega \) is the angular velocity, \( g \) is the acceleration due to gravity, \( l \) is the length of the pendulum, \( m \) is the mass of the pendulum, and \( u \) is the control input (force applied to the cart). Let \( x = [\theta, \omega]^T \). The system can be written as:
-\[
-\dot{x} = \begin{bmatrix}
-\omega \\
-\frac{g}{l} \sin(\theta) + \frac{u}{ml^2} \cos(\theta)
-\end{bmatrix}
-\]
-To ensure that the pendulum remains upright, we can define a control barrier function \( h(x) \). For example, let:
-\[
-h(x) = \cos(\theta) - \cos(\theta_{\max})
-\]
-where \( \theta_{\max} \) is the maximum allowable deviation from the upright position. The safe set \( C \) is then given by:
-\[
-C = \{ x \in \mathbb{R}^2 : h(x) \geq 0 \}
-\]
-The time derivative of \( h(x) \) along the trajectories of the system is:
-\[
-\dot{h}(x) = \frac{\partial h}{\partial x} \dot{x} = \begin{bmatrix}
--\sin(\theta) & 0
-\end{bmatrix} \begin{bmatrix}
-\omega \\
-\frac{g}{l} \sin(\theta) + \frac{u}{ml^2} \cos(\theta)
-\end{bmatrix} = -\omega \sin(\theta)
-\]
-To ensure that \( \dot{h}(x) \geq -\alpha(h(x)) \), where \( \alpha \) is a class \( \mathcal{K} \) function, we can choose \( \alpha(h(x)) = \lambda h(x) \) for some positive constant \( \lambda \). Thus, the condition becomes:
-\[
--\omega \sin(\theta) \geq -\lambda (\cos(\theta) - \cos(\theta_{\max}))
-\]
-This inequality can be used to design a controller that ensures the pendulum remains within the safe set \( C \).
 
 \end{document}
