@@ -212,7 +212,7 @@ To estimate the Lipschitz constants \( L_{f-g} \), \( L_{g_0} \), and \( L_{g_1}
     c = \Phi^{-1}(\rho) \xi
     \]
     where \(\Phi^{-1}(\rho)\) is the Z-score for the desired confidence level \(\rho\) (e.g., \(\rho = 0.95\) corresponds to 1.96), and \(\xi\) is the standard error of the \(\gamma\) estimate.
-
+    The standard error measures the uncertainty in the estimate of \(\gamma\) and is calculated during the MLE process.
     \item \textbf{Estimate Lipschitz Constant:} The final estimate for the Lipschitz constant is:
     \[
     \hat{L}_h = \hat{\gamma} + c
@@ -221,7 +221,7 @@ To estimate the Lipschitz constants \( L_{f-g} \), \( L_{g_0} \), and \( L_{g_1}
 \end{enumerate}
 
 \textbf{Filtering Procedure}
-We aim to choose \( D \) large enough for planning while keeping \( L_{f-g} \) small. To achieve this, we use a filtering procedure to reduce the impact of outliers in \( S \).
+The goal is to choose \( D \) large enough for planning while keeping \( L_{f-g} \) small (further away from the training data but with less error). To achieve this, a filtering procedure is used to reduce the impact of outliers in \( S \).
 
 Let \( \mu \) and \( \sigma \) be the mean and standard deviation of the error over \( S \). Define:
 \[
@@ -229,11 +229,35 @@ S_D = \{(\bar{x}, \bar{u}) \in S \mid \|f(\bar{x}, \bar{u}) - g(\bar{x}, \bar{u}
 \]
 where \( a \) is a user-defined parameter.
 
-We run Algorithm 2 to grow \( D \) by proposing values of \( r \), estimating \( L_{f-g} \), and increasing \( r \) until \( r > \epsilon \) or \( L_{f-g} \geq 1 \). Finding \( D \) with \( r > \epsilon \) and \( L_{f-g} < 1 \) is useful for planning.
+\subsubsection{Algorithm 2: Selecting r and D}
+\begin{enumerate}
+    \item \textbf{Input:} \( \mu, \sigma, a, S_D, \Psi, \alpha > 0 \)
+    \item \( r \leftarrow \mu + a\sigma \)
+    \item \textbf{while} True \textbf{do}
+    \begin{enumerate}
+        \item construct \( D \) using equation (8)
+        \item estimate \( L_{f-g} \) using Algorithm 1 and \( \Psi \)
+        \item calculate \( \epsilon \) using equation (6)
+        \item \textbf{if} \( L_{f-g} \geq 1 \) \textbf{then} return failure
+        \item \textbf{if} \( r > \epsilon \) \textbf{then} return \( r \) and \( D \)
+        \item \textbf{else} \( r \leftarrow \epsilon + \alpha \) // \( \alpha \) is a small constant
+    \end{enumerate}
+\end{enumerate}
 
-In Euclidean spaces, \( r \geq b_T \). Without filtering, \( r = b_T \), since no point in \( D \) is further than \( r \) from \( S_D \). Filtering shrinks \( D \), decreasing dispersion, making \( r \geq b_T \) possible. The parameter \( a \) balances the size of \( D \) against \( L_{f-g} \), tuned heuristically.
+Algorithm 2 is run to grow \( D \) by proposing values of \( r \), estimating \( L_{f-g} \), and increasing \( r \) until \( r > \epsilon \) or \( L_{f-g} \geq 1 \). Finding \( D \) with \( r > \epsilon \) and \( L_{f-g} < 1 \) is useful for planning.
 
-Filtering excludes regions where the learned model is less accurate, yielding smaller \( e_T \). Filtering does not affect the i.i.d. property of samples needed for Algorithm 1; it only masks the domain. Algorithm 2 returns a minimum \( r \), but a larger \( r \) can be chosen if \( L_{f-g} \) is estimated with Algorithm 1. A larger \( r \) expands the trusted domain, easing planning.
+In Euclidean spaces, \( r \geq b_T \). If no filtering is done, \( r = b_T \), since no point in \( D \) is further than a distance \( r \) from \( S_D \) and the furthest any point in \( D \) can lie from a point in \( S_D \) is \( r \); however, filtering shrinks \( D \) and thus decreases the dispersion, making it possible that \( r \geq b_T \). The parameter \( a \) should be chosen to balance the size of \( D \) against the magnitude of \( L_{f-g} \), which we tune heuristically.
 
-For stochastic dynamics, the estimated Lipschitz constant may be unbounded, causing issues in Algorithm 1. \( L_{g_0} \) and \( L_{g_1} \) can also be estimated with Algorithm 1. Alternatively, [22] provides tight upper bounds on the Lipschitz constant of neural networks, though it does not scale to our networks. Other approaches [23] improve scalability at the cost of looser bounds, to be examined in the future.
+This filtering lets us exclude regions where our learned model is less accurate, yielding smaller \( e_T \). Note that filtering does not affect the i.i.d. property of the samples needed for Algorithm 1; it only applies a mask to the domain. We also note that Algorithm 2 returns a minimum value for \( r \), but a larger \( r \) can be chosen as long as \( L_{f-g} \) is estimated with Algorithm 1. A larger \( r \) makes planning easier by expanding the trusted domain.
+
+While we never explicitly address the assumption that the true dynamics are deterministic, the estimated Lipschitz constant may be unbounded in the stochastic case, such as when two samples have the same inputs but different outputs due to noise, causing a division by 0 in line 3 of Algorithm 1. \( L_{g_0} \) and \( L_{g_1} \) may also be estimated with Algorithm 1, which we employ in the results. Alternatively, other methods can give tight upper bounds on the Lipschitz constant of neural networks, though they may not scale to the networks used in our results. Future work will examine approaches that improve scalability at the cost of looser Lipschitz upper bounds.
+\section{Questions}
+\begin{itemize}
+    \item How do you sample around the trained data?
+    \item How do you get the true dynamics?
+\end{itemize}
+
+\subsubsection{Planning}
+
+
 \end{document}
