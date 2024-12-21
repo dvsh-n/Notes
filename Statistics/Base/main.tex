@@ -182,4 +182,80 @@ If a friend of yours hands you a coin, the null hypothesis (the baseline assumed
 If you test this coin by flipping it six times and it comes up heads on all six or tails on all six, this observation would suggest that you should reject the null hypothesis (theres a good chance that the coin is not fair) because chance alone would facilitate such an observation less than \(5\%\) of the time, i.e., 
 .
 
+\section{Binomial Distribution}
+The binomial distribution is a discrete probability distribution that describes the number of successes in a fixed number of independent Bernoulli trials, each with the same probability of success. It is defined by two parameters: \(n\) (the number of trials) and \(p\) (the probability of success in each trial).
+
+The probability mass function (PMF) of the binomial distribution is given by:
+\[
+P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}
+\]
+where:
+- \(X\) is the random variable representing the number of successes
+- \(k\) is the number of successes
+- \(\binom{n}{k}\) is the binomial coefficient, calculated as \(\frac{n!}{k!(n - k)!}\)
+- \(p\) is the probability of success
+- \(1 - p\) is the probability of failure
+
+\subsection{Example: Coin Toss}
+Suppose we have a fair coin (i.e., \(p = 0.5\)) and we flip it 10 times. We want to find the probability of getting exactly 6 heads.
+
+Here, \(n = 10\) and \(p = 0.5\). The number of successes \(k = 6\).
+
+Using the binomial formula:
+\[
+P(X = 6) = \binom{10}{6} (0.5)^6 (0.5)^{4}
+\]
+
+First, calculate the binomial coefficient:
+\[
+\binom{10}{6} = \frac{10!}{6!4!} = 210
+\]
+
+Then, calculate the probability:
+\[
+P(X = 6) = 210 \times (0.5)^{10} = 210 \times \frac{1}{1024} \approx 0.205
+\]
+
+\section{Maximum Likelihood Estimation}
+Maximum Likelihood Estimation (MLE) is a method used to estimate the parameters of a statistical model. The goal of MLE is to find the parameter values that maximize the likelihood function, which measures how well the model explains the observed data.
+
+Given a set of independent and identically distributed data points \(X = \{x_1, x_2, \ldots, x_n\}\) and a probability density function \(f(x; \theta)\) parameterized by \(\theta\), the likelihood function \(L(\theta)\) is defined as:
+\[
+L(\theta) = \prod_{i=1}^{n} f(x_i; \theta)
+\]
+
+The log-likelihood function, which is often easier to work with, is given by:
+\[
+\ell(\theta) = \log L(\theta) = \sum_{i=1}^{n} \log f(x_i; \theta)
+\]
+
+The MLE for \(\theta\) is the value that maximizes the log-likelihood function:
+\[
+\hat{\theta}_{\text{MLE}} = \arg \max_{\theta} \ell(\theta)
+\]
+
+\subsection{Example: Estimating the Mean of a Normal Distribution}
+Suppose we have a sample \(X = \{x_1, x_2, \ldots, x_n\}\) from a normal distribution with unknown mean \(\mu\) and known variance \(\sigma^2\). The probability density function is:
+\[
+f(x; \mu) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
+\]
+
+The log-likelihood function is:
+\[
+\ell(\mu) = \sum_{i=1}^{n} \log f(x_i; \mu) = -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2
+\]
+
+To find the MLE for \(\mu\), we take the derivative of \(\ell(\mu)\) with respect to \(\mu\) and set it to zero:
+\[
+\frac{\partial \ell(\mu)}{\partial \mu} = \frac{1}{\sigma^2} \sum_{i=1}^{n} (x_i - \mu) = 0
+\]
+
+Solving for \(\mu\), we get:
+\[
+\hat{\mu}_{\text{MLE}} = \frac{1}{n} \sum_{i=1}^{n} x_i
+\]
+
+Thus, the MLE for the mean \(\mu\) of a normal distribution is the sample mean.
+
+So, the probability of getting exactly 6 heads in 10 flips of a fair coin is approximately 0.205, or 20.5%.
 \end{document}
