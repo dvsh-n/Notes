@@ -257,5 +257,322 @@ Solving for \(\mu\), we get:
 
 Thus, the MLE for the mean \(\mu\) of a normal distribution is the sample mean.
 
-So, the probability of getting exactly 6 heads in 10 flips of a fair coin is approximately 0.205, or 20.5%.
+So, the probability of getting exactly 6 heads in 10 flips of a fair coin is approximately 0.205, or 20.5\%.
+
+\section{T-Test}
+A t-test is a statistical test used to compare the means of two groups. It helps determine if the differences between the groups are statistically significant.
+
+\subsection{One-Sample T-Test}
+A one-sample t-test compares the mean of a single sample to a known value (usually the population mean).
+
+The test statistic is calculated as:
+\[
+t = \frac{\bar{X} - \mu_0}{s / \sqrt{n}}
+\]
+where:
+- \(\bar{X}\) is the sample mean
+- \(\mu_0\) is the known value (population mean)
+- \(s\) is the sample standard deviation
+- \(n\) is the sample size
+
+\subsection{Two-Sample T-Test}
+A two-sample t-test compares the means of two independent samples to determine if they come from populations with equal means.
+
+The test statistic is calculated as:
+\[
+t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}
+\]
+where:
+- \(\bar{X}_1\) and \(\bar{X}_2\) are the sample means
+- \(s_1\) and \(s_2\) are the sample standard deviations
+- \(n_1\) and \(n_2\) are the sample sizes
+
+\subsection{Paired T-Test}
+A paired t-test compares the means of two related groups. It is used when the samples are dependent, such as measurements taken before and after a treatment on the same subjects.
+
+The test statistic is calculated as:
+\[
+t = \frac{\bar{D}}{s_D / \sqrt{n}}
+\]
+where:
+- \(\bar{D}\) is the mean of the differences between paired observations
+- \(s_D\) is the standard deviation of the differences
+- \(n\) is the number of pairs
+
+\subsection{Example: One-Sample T-Test}
+Suppose we want to test if the average height of a sample of 20 students is different from the known average height of 170 cm. The sample mean height is 172 cm with a standard deviation of 5 cm.
+
+The null hypothesis is:
+\[
+H_0: \mu = 170
+\]
+
+The test statistic is:
+\[
+t = \frac{172 - 170}{5 / \sqrt{20}} = \frac{2}{1.118} \approx 1.79
+\]
+
+Using a t-distribution table with 19 degrees of freedom, we find the p-value corresponding to \(t = 1.79\). If the p-value is less than the chosen significance level (e.g., 0.05), we reject the null hypothesis and conclude that the average height is significantly different from 170 cm.
+
+\section{Z-Test}
+A Z-test is a statistical test used to determine whether there is a significant difference between the means of two groups, or between a sample mean and a known population mean, when the population variance is known and the sample size is large (typically \(n > 30\)).
+
+The test statistic for a one-sample Z-test is calculated as:
+\[
+Z = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}}
+\]
+where:
+- \(\bar{X}\) is the sample mean
+- \(\mu_0\) is the population mean
+- \(\sigma\) is the population standard deviation
+- \(n\) is the sample size
+
+For a two-sample Z-test, the test statistic is calculated as:
+\[
+Z = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}}
+\]
+where:
+- \(\bar{X}_1\) and \(\bar{X}_2\) are the sample means
+- \(\sigma_1\) and \(\sigma_2\) are the population standard deviations
+- \(n_1\) and \(n_2\) are the sample sizes
+
+\subsection{Example: One-Sample Z-Test}
+Suppose we want to test if the average weight of a sample of 50 people is different from the known average weight of 70 kg. The sample mean weight is 72 kg with a population standard deviation of 10 kg.
+
+The null hypothesis is:
+\[
+H_0: \mu = 70
+\]
+
+The test statistic is:
+\[
+Z = \frac{72 - 70}{10 / \sqrt{50}} = \frac{2}{1.414} \approx 1.41
+\]
+
+Using the standard normal distribution table, we find the p-value corresponding to \(Z = 1.41\). If the p-value is less than the chosen significance level (e.g., 0.05), we reject the null hypothesis and conclude that the average weight is significantly different from 70 kg.
+
+\subsection{Difference Between T-Test and Z-Test}
+The T-test and Z-test are both statistical tests used to compare means, but they are used under different conditions and have different assumptions.
+
+\begin{itemize}
+    \item \textbf{T-Test:}
+    \begin{itemize}
+        \item Used when the sample size is small (typically \(n < 30\)).
+        \item Used when the population variance is unknown.
+        \item The test statistic follows a t-distribution.
+        \item More appropriate for small sample sizes because it accounts for the additional uncertainty in the estimate of the population standard deviation.
+    \end{itemize}
+    
+    \item \textbf{Z-Test:}
+    \begin{itemize}
+        \item Used when the sample size is large (typically \(n > 30\)).
+        \item Used when the population variance is known.
+        \item The test statistic follows a standard normal distribution (Z-distribution).
+        \item More appropriate for large sample sizes because the sample mean will be approximately normally distributed due to the Central Limit Theorem.
+    \end{itemize}
+\end{itemize}
+
+In summary, the main differences between the T-test and Z-test lie in the sample size and whether the population variance is known. The T-test is used for smaller samples with unknown population variance, while the Z-test is used for larger samples with known population variance.
+
+\section{Type I and Type II Errors}
+In hypothesis testing, two types of errors can occur:
+
+\subsection{Type I Error}
+A Type I error occurs when the null hypothesis (\(H_0\)) is rejected when it is actually true. This is also known as a "false positive" or "alpha error." The probability of making a Type I error is denoted by \(\alpha\), which is the significance level of the test.
+
+\[
+\text{Type I Error} = P(\text{Reject } H_0 \mid H_0 \text{ is true}) = \alpha
+\]
+
+\subsection{Type II Error}
+A Type II error occurs when the null hypothesis (\(H_0\)) is not rejected when it is actually false. This is also known as a "false negative" or "beta error." The probability of making a Type II error is denoted by \(\beta\).
+
+\[
+\text{Type II Error} = P(\text{Fail to reject } H_0 \mid H_0 \text{ is false}) = \beta
+\]
+
+\subsection{Power of a Test}
+The power of a test is the probability of correctly rejecting the null hypothesis when it is false. It is calculated as \(1 - \beta\).
+
+\[
+\text{Power} = 1 - \beta
+\]
+
+The power of a test increases with larger sample sizes, larger effect sizes, and higher significance levels.
+
+\subsection{Example}
+Suppose we are testing a new drug and set the significance level (\(\alpha\)) at 0.05. If the null hypothesis is that the drug has no effect, a Type I error would occur if we conclude that the drug is effective when it is not. A Type II error would occur if we conclude that the drug is not effective when it actually is.
+
+By understanding and controlling the probabilities of Type I and Type II errors, researchers can design more reliable and valid experiments.
+
+\section{Poisson Distribution}
+The Poisson distribution is a discrete probability distribution that expresses the probability of a given number of events occurring in a fixed interval of time or space, given the average number of times the event occurs over that interval. It is defined by a single parameter \(\lambda\) (the average rate of occurrence).
+
+The probability mass function (PMF) of the Poisson distribution is given by:
+\[
+P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}
+\]
+where:
+- \(X\) is the random variable representing the number of events
+- \(k\) is the number of events
+- \(\lambda\) is the average rate of occurrence
+- \(e\) is the base of the natural logarithm
+
+\subsection{Example: Number of Emails}
+Suppose the average number of emails received per hour is 5. We want to find the probability of receiving exactly 3 emails in the next hour.
+
+Here, \(\lambda = 5\) and \(k = 3\).
+
+Using the Poisson formula:
+\[
+P(X = 3) = \frac{5^3 e^{-5}}{3!} = \frac{125 \times 0.0067}{6} \approx 0.1404
+\]
+
+So, the probability of receiving exactly 3 emails in the next hour is approximately 0.1404, or 14.04%.
+
+\section{Chi-Square Test}
+The Chi-Square test is a statistical test used to determine if there is a significant association between categorical variables. It compares the observed frequencies in each category to the frequencies expected if there were no association between the variables.
+
+\subsection{Chi-Square Test for Independence}
+The Chi-Square test for independence assesses whether two categorical variables are independent. The test statistic is calculated as:
+\[
+\chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}
+\]
+where:
+- \(O_i\) is the observed frequency in category \(i\)
+- \(E_i\) is the expected frequency in category \(i\), calculated as \(E_i = \frac{(row\ total \times column\ total)}{grand\ total}\)
+
+\subsection{Example: Chi-Square Test for Independence}
+Suppose we want to test if there is an association between gender (male, female) and preference for a new product (like, dislike). We collect data from a sample of 100 people, and the observed frequencies are as follows:
+
+\begin{tabular}{|c|c|c|}
+\hline
+ & Like & Dislike \\
+\hline
+Male & 30 & 20 \\
+\hline
+Female & 10 & 40 \\
+\hline
+\end{tabular}
+
+The expected frequencies are calculated as:
+\[
+E_{11} = \frac{(50 \times 40)}{100} = 20, \quad E_{12} = \frac{(50 \times 60)}{100} = 30
+\]
+\[
+E_{21} = \frac{(50 \times 40)}{100} = 20, \quad E_{22} = \frac{(50 \times 60)}{100} = 30
+\]
+
+The test statistic is:
+\[
+\chi^2 = \frac{(30 - 20)^2}{20} + \frac{(20 - 30)^2}{30} + \frac{(10 - 20)^2}{20} + \frac{(40 - 30)^2}{30} = 10
+\]
+
+Using a Chi-Square distribution table with 1 degree of freedom, we find the p-value corresponding to \(\chi^2 = 10\). If the p-value is less than the chosen significance level (e.g., 0.05), we reject the null hypothesis and conclude that there is a significant association between gender and product preference.
+
+\subsection{Chi-Square Goodness of Fit Test}
+The Chi-Square goodness of fit test determines if a sample data matches a population with a specific distribution. The test statistic is calculated similarly:
+\[
+\chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}
+\]
+where \(O_i\) and \(E_i\) are the observed and expected frequencies, respectively.
+
+\subsection{Example: Chi-Square Goodness of Fit Test}
+Suppose we want to test if a six-sided die is fair. We roll the die 60 times, and the observed frequencies are as follows: 8, 10, 12, 11, 9, 10.
+
+The expected frequency for each side is \(E_i = \frac{60}{6} = 10\).
+
+The test statistic is:
+\[
+\chi^2 = \frac{(8 - 10)^2}{10} + \frac{(10 - 10)^2}{10} + \frac{(12 - 10)^2}{10} + \frac{(11 - 10)^2}{10} + \frac{(9 - 10)^2}{10} + \frac{(10 - 10)^2}{10} = 1.4
+\]
+
+Using a Chi-Square distribution table with 5 degrees of freedom, we find the p-value corresponding to \(\chi^2 = 1.4\). If the p-value is greater than the chosen significance level (e.g., 0.05), we fail to reject the null hypothesis and conclude that the die is fair.
+
+The Chi-Square test is a versatile tool for analyzing categorical data and can be used in various applications, including testing for independence and goodness of fit.
+
+\section{Confidence Intervals}
+A confidence interval is a range of values, derived from sample statistics, that is likely to contain the value of an unknown population parameter. The interval has an associated confidence level that quantifies the level of confidence that the parameter lies within the interval.
+
+\subsection{Confidence Interval for the Mean}
+For a population with a normal distribution and known standard deviation, the confidence interval for the mean \(\mu\) is given by:
+\[
+\bar{X} \pm Z_{\alpha/2} \frac{\sigma}{\sqrt{n}}
+\]
+where:
+- \(\bar{X}\) is the sample mean
+- \(Z_{\alpha/2}\) is the Z-score corresponding to the desired confidence level
+- \(\sigma\) is the population standard deviation
+- \(n\) is the sample size
+
+If the population standard deviation is unknown, the t-distribution is used instead of the normal distribution:
+\[
+\bar{X} \pm t_{\alpha/2, n-1} \frac{s}{\sqrt{n}}
+\]
+where:
+- \(t_{\alpha/2, n-1}\) is the t-score with \(n-1\) degrees of freedom
+- \(s\) is the sample standard deviation
+
+\subsection{Example: Confidence Interval for the Mean}
+Suppose we have a sample of 25 students with a mean test score of 80 and a standard deviation of 10. We want to calculate the 95\% confidence interval for the population mean.
+
+Using the t-distribution (since the population standard deviation is unknown):
+\[
+\bar{X} = 80, \quad s = 10, \quad n = 25, \quad t_{\alpha/2, 24} \approx 2.064
+\]
+
+The confidence interval is:
+\[
+80 \pm 2.064 \frac{10}{\sqrt{25}} = 80 \pm 4.128
+\]
+
+So, the 95\% confidence interval for the population mean is \([75.872, 84.128]\).
+
+\subsection{Confidence Interval for Proportions}
+For a population proportion \(p\), the confidence interval is given by:
+\[
+\hat{p} \pm Z_{\alpha/2} \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}
+\]
+where:
+- \(\hat{p}\) is the sample proportion
+- \(Z_{\alpha/2}\) is the Z-score corresponding to the desired confidence level
+- \(n\) is the sample size
+
+\subsection{Example: Confidence Interval for Proportions}
+Suppose we have a sample of 200 voters, and 120 of them support a particular candidate. We want to calculate the 95\% confidence interval for the population proportion.
+
+\[
+\hat{p} = \frac{120}{200} = 0.6, \quad Z_{\alpha/2} \approx 1.96
+\]
+
+The confidence interval is:
+\[
+0.6 \pm 1.96 \sqrt{\frac{0.6 \times 0.4}{200}} = 0.6 \pm 0.068
+\]
+
+So, the 95\% confidence interval for the population proportion is \([0.532, 0.668]\).
+
+Confidence intervals provide a useful way to estimate population parameters and quantify the uncertainty associated with sample estimates.
+
+\section{ANOVA Test}
+ANOVA (Analysis of Variance) is a statistical method used to compare the means of three or more groups to determine if there are any statistically significant differences between them.
+
+\subsection{One-Way ANOVA}
+One-way ANOVA tests the effect of a single factor on a response variable. The null hypothesis (\(H_0\)) states that all group means are equal.
+
+The test statistic is:
+\[
+F = \frac{\text{Between-group variability}}{\text{Within-group variability}}
+\]
+
+If the calculated \(F\)-value is greater than the critical value from the \(F\)-distribution table, we reject the null hypothesis.
+
+\subsection{Example}
+Suppose we have three groups with the following means: \( \bar{X}_1 = 5 \), \( \bar{X}_2 = 7 \), \( \bar{X}_3 = 6 \). We perform a one-way ANOVA to test if the means are significantly different.
+
+Calculate the \(F\)-value and compare it to the critical value to determine if there are significant differences between the group means.
+
+ANOVA helps in identifying whether the differences in sample means are due to actual differences in the population means or just random variation.
+
+
 \end{document}

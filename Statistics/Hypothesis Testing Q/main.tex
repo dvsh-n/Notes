@@ -1,0 +1,156 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\setlength{\parindent}{0pt}
+
+\title{Hypothesis Testing Questions}
+\author{Devesh Nath}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Questions}
+\subsection{Explain the concept of statistical power}
+
+Statistical power is the probability that a test will correctly reject a false null hypothesis. It is a measure of a test's ability to detect an effect when there is one. The power of a test is influenced by several factors, including the sample size, the significance level, the effect size, and the variability in the data.
+
+Mathematically, power is defined as:
+\[
+\mathrm{Power} = 1 - \beta
+\]
+where \(\beta\) is the probability of making a Type II error (failing to reject a false null hypothesis).
+
+A higher statistical power reduces the risk of Type II errors, making the test more reliable. Researchers aim for a power of 0.8 or higher, meaning there is an 80\% chance of detecting an effect if it exists.
+
+\subsection{Explain homoscedasticity and heteroscedasticity.}
+
+Homoscedasticity refers to the assumption that the variance of the errors is constant across all levels of the independent variable(s). This is an important assumption in regression analysis and other statistical models because it ensures that the model's predictions are equally reliable across all values of the independent variable(s).
+
+Mathematically, homoscedasticity can be expressed as:
+\[
+\mathrm{Var}(\epsilon_i) = \sigma^2 \quad \forall \, i
+\]
+where \(\epsilon_i\) represents the error term and \(\sigma^2\) is the constant variance.
+
+Heteroscedasticity, on the other hand, occurs when the variance of the errors is not constant across all levels of the independent variable(s). This can lead to inefficient estimates and invalid statistical tests, as the standard errors of the estimates may be biased.
+
+Detecting heteroscedasticity can be done using various methods, such as plotting the residuals versus the fitted values or conducting statistical tests like the Breusch-Pagan test or the White test.
+
+Addressing heteroscedasticity often involves transforming the dependent variable, using weighted least squares, or applying robust standard errors to obtain more reliable estimates.
+
+\subsection{How do you test if a dataset follows a normal distribution?}
+
+Testing whether a dataset follows a normal distribution is a common step in statistical analysis. There are several methods to test for normality, including graphical methods and statistical tests.
+
+\subsubsection{Graphical Methods}
+
+\begin{itemize}
+    \item \textbf{Histogram}: Plotting a histogram of the data can provide a visual assessment of normality. If the data follows a normal distribution, the histogram should resemble a bell curve.
+    \item \textbf{Q-Q Plot}: A Quantile-Quantile (Q-Q) plot compares the quantiles of the dataset with the quantiles of a normal distribution. If the data is normally distributed, the points should fall approximately along a straight line.
+\end{itemize}
+
+\subsubsection{Statistical Tests}
+
+\begin{itemize}
+    \item \textbf{Shapiro-Wilk Test}: This test evaluates the null hypothesis that a sample comes from a normally distributed population. A small p-value (typically less than 0.05) indicates that the data is not normally distributed.
+    \item \textbf{Kolmogorov-Smirnov Test}: This test compares the sample distribution with a reference normal distribution. A significant p-value suggests that the data does not follow a normal distribution.
+    \item \textbf{Anderson-Darling Test}: This test is a modification of the Kolmogorov-Smirnov test and gives more weight to the tails of the distribution. It is more sensitive to deviations from normality in the tails.
+    \item \textbf{Lilliefors Test}: This is a variation of the Kolmogorov-Smirnov test that adjusts for the fact that the parameters of the normal distribution are estimated from the data.
+\end{itemize}
+
+It is often recommended to use a combination of graphical methods and statistical tests to assess normality, as each method has its own strengths and limitations.
+
+\subsection{What is an effect size, and why is it important?}
+
+Effect size is a quantitative measure of the magnitude of the difference between groups or the strength of a relationship between variables. Unlike p-values, which only indicate whether an effect exists, effect size provides information about the size of the effect, making it a crucial component in the interpretation of research results.
+
+There are several types of effect size measures, including:
+
+\begin{itemize}
+    \item \textbf{Cohen's d}: Measures the difference between two means in terms of standard deviation units. It is commonly used in t-tests.
+    \item \textbf{Pearson's r}: Measures the strength and direction of the linear relationship between two continuous variables.
+    \item \textbf{Odds Ratio}: Used in logistic regression to measure the odds of an event occurring in one group compared to another.
+    \item \textbf{Eta-squared}: Used in ANOVA to measure the proportion of variance in the dependent variable that is associated with the independent variable(s).
+\end{itemize}
+
+Effect size is important for several reasons:
+
+\begin{itemize}
+    \item \textbf{Practical Significance}: While a p-value can indicate statistical significance, it does not convey the practical importance of the findings. Effect size helps to understand the real-world impact of the results.
+    \item \textbf{Meta-Analysis}: Effect sizes are essential for combining and comparing results across studies in meta-analyses.
+    \item \textbf{Power Analysis}: Effect size is a key component in power analysis, which is used to determine the sample size needed to detect an effect of a given size with a certain level of confidence.
+\end{itemize}
+
+In summary, effect size provides valuable information about the magnitude and practical significance of research findings, complementing the information provided by p-values.
+
+\subsection{How do you control for multiple comparisons in hypothesis testing?}
+
+When conducting multiple hypothesis tests, the probability of making at least one Type I error (false positive) increases. To control for this, several methods can be used:
+
+\subsubsection{Bonferroni Correction}
+
+The Bonferroni correction is a simple and conservative method. It adjusts the significance level by dividing it by the number of tests. For example, if you are conducting 5 tests and want an overall significance level of 0.05, you would use a significance level of \( \alpha / 5 = 0.01 \) for each individual test.
+
+\[
+\alpha_{\text{adjusted}} = \frac{\alpha}{n}
+\]
+
+\subsubsection{Holm-Bonferroni Method}
+
+The Holm-Bonferroni method is a stepwise procedure that is less conservative than the Bonferroni correction. It involves ordering the p-values from smallest to largest and comparing each p-value to a progressively less stringent significance level.
+
+\subsubsection{False Discovery Rate (FDR)}
+
+The False Discovery Rate (FDR) approach, such as the Benjamini-Hochberg procedure, controls the expected proportion of false positives among the rejected hypotheses. It is less conservative than the Bonferroni correction and is particularly useful when dealing with a large number of tests.
+
+\subsubsection{Tukey's Honest Significant Difference (HSD)}
+
+Tukey's HSD is used for pairwise comparisons after an ANOVA. It controls the family-wise error rate and is appropriate when comparing all possible pairs of group means.
+
+\subsubsection{Scheffé's Method}
+
+Scheffé's method is a post-hoc analysis technique that is more flexible than Tukey's HSD. It can be used for complex comparisons, not just pairwise comparisons, and controls the family-wise error rate.
+
+In summary, controlling for multiple comparisons is crucial to avoid inflated Type I error rates. The choice of method depends on the context and the number of comparisons being made.
+
+\subsection{Explain the difference between a one-tailed and two-tailed test}
+
+A one-tailed test, also known as a directional test, is used when the research hypothesis specifies the direction of the effect. It tests for the possibility of the relationship in one direction and completely disregards the possibility of a relationship in the other direction. For example, if we are testing whether a new drug is more effective than the current drug, we would use a one-tailed test.
+
+In a one-tailed test, the critical region for rejecting the null hypothesis is located in only one tail of the distribution. The null and alternative hypotheses for a one-tailed test might be:
+\[
+H_0: \mu \leq \mu_0 \quad \text{vs} \quad H_a: \mu > \mu_0
+\]
+or
+\[
+H_0: \mu \geq \mu_0 \quad \text{vs} \quad H_a: \mu < \mu_0
+\]
+
+A two-tailed test, also known as a non-directional test, is used when the research hypothesis does not specify the direction of the effect. It tests for the possibility of the relationship in both directions. For example, if we are testing whether a new drug has a different effect than the current drug (either more effective or less effective), we would use a two-tailed test.
+
+In a two-tailed test, the critical region for rejecting the null hypothesis is split between both tails of the distribution. The null and alternative hypotheses for a two-tailed test might be:
+\[
+H_0: \mu = \mu_0 \quad \text{vs} \quad H_a: \mu \neq \mu_0
+\]
+
+The choice between a one-tailed and two-tailed test depends on the research question and the hypothesis being tested. One-tailed tests have more statistical power to detect an effect in one direction but at the cost of not being able to detect an effect in the opposite direction. Two-tailed tests are more conservative and can detect effects in both directions.
+
+\subsection{What are some limitations of p-values in hypothesis testing?}
+
+P-values are widely used in hypothesis testing to determine the statistical significance of results. However, they have several limitations that researchers should be aware of:
+
+\begin{itemize}
+    \item \textbf{Misinterpretation}: P-values are often misinterpreted as the probability that the null hypothesis is true. In reality, a p-value indicates the probability of obtaining results at least as extreme as the observed results, assuming the null hypothesis is true.
+    \item \textbf{Arbitrary Thresholds}: The common threshold of 0.05 for statistical significance is arbitrary and can lead to binary thinking (significant vs. not significant) without considering the context or the effect size.
+    \item \textbf{Sample Size Dependence}: P-values are influenced by sample size. With large sample sizes, even trivial effects can become statistically significant, while small sample sizes may fail to detect meaningful effects.
+    \item \textbf{Lack of Practical Significance}: A statistically significant result does not necessarily imply practical or clinical significance. P-values do not provide information about the magnitude or importance of an effect.
+    \item \textbf{Multiple Comparisons Problem}: Conducting multiple hypothesis tests increases the likelihood of obtaining at least one significant result by chance. This can lead to false positives if not properly controlled for.
+    \item \textbf{Publication Bias}: Studies with significant p-values are more likely to be published, leading to a bias in the literature. This can distort the perceived evidence for an effect.
+    \item \textbf{Overemphasis on P-values}: Focusing solely on p-values can lead to neglecting other important aspects of the data, such as confidence intervals, effect sizes, and the overall study design.
+\end{itemize}
+
+In summary, while p-values are a useful tool in hypothesis testing, they should be interpreted with caution and in conjunction with other statistical measures and contextual information.
+
+\end{document}
