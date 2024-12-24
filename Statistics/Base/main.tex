@@ -82,6 +82,58 @@ Formally, if \(X_1, X_2, \ldots, X_n\) are independent and identically distribut
 
 The CLT is important because it justifies the use of the normal distribution in many practical applications, even when the underlying data do not follow a normal distribution.
 
+\section{Bayes' Theorem}
+Bayes' Theorem is a fundamental theorem in probability theory that describes how to update the probability of a hypothesis based on new evidence. 
+
+Bayes' Theorem is stated as:
+\[
+P(A \mid B) = \frac{P(B \mid A) P(A)}{P(B)}
+\]
+where:
+- \(P(A \mid B)\) is the posterior probability, the probability of hypothesis \(A\) given the evidence \(B\).
+- \(P(B \mid A)\) is the likelihood, the probability of evidence \(B\) given that hypothesis \(A\) is true.
+- \(P(A)\) is the prior probability, the initial probability of hypothesis \(A\) before seeing the evidence.
+- \(P(B)\) is the marginal likelihood, the total probability of the evidence under all possible hypotheses.
+
+\subsection{Prior Probability}
+The prior probability, \(P(A)\), represents our initial belief about the probability of the hypothesis before observing any evidence. It is based on previous knowledge or assumptions.
+
+\subsection{Likelihood}
+The likelihood, \(P(B \mid A)\), represents the probability of observing the evidence given that the hypothesis is true. It quantifies how well the hypothesis explains the evidence.
+
+\subsection{Posterior Probability}
+The posterior probability, \(P(A \mid B)\), represents the updated probability of the hypothesis after observing the evidence. It combines the prior probability and the likelihood to provide a new probability based on the evidence.
+
+\subsection{Marginal Likelihood}
+The marginal likelihood, \(P(B)\), represents the total probability of observing the evidence under all possible hypotheses. It is calculated as:
+\[
+P(B) = \sum_{i} P(B \mid A_i) P(A_i)
+\]
+where \(A_i\) represents all possible hypotheses.
+
+\subsection{Example: Medical Diagnosis}
+Suppose a patient is tested for a rare disease. The disease has a prevalence (prior probability) of 0.1\% (\(P(D) = 0.001\)). The test has a sensitivity (true positive rate) of 99\% (\(P(T \mid D) = 0.99\)) and a specificity (true negative rate) of 99\% (\(P(\neg T \mid \neg D) = 0.99\)).
+
+We want to find the probability that the patient has the disease given a positive test result (\(P(D \mid T)\)).
+
+First, calculate the probability of a positive test result (\(P(T)\)):
+\[
+P(T) = P(T \mid D) P(D) + P(T \mid \neg D) P(\neg D)
+\]
+\[
+P(T) = (0.99 \times 0.001) + (0.01 \times 0.999) = 0.00099 + 0.00999 = 0.01098
+\]
+
+Next, apply Bayes' Theorem:
+\[
+P(D \mid T) = \frac{P(T \mid D) P(D)}{P(T)}
+\]
+\[
+P(D \mid T) = \frac{0.99 \times 0.001}{0.01098} \approx 0.0902
+\]
+
+So, the probability that the patient has the disease given a positive test result is approximately 9.02%.
+
 \section{Z-Score}
 The Z-score measures how many standard deviations an element is from the mean, allowing for comparison between different data sets.
 
@@ -430,67 +482,6 @@ P(X = 3) = \frac{5^3 e^{-5}}{3!} = \frac{125 \times 0.0067}{6} \approx 0.1404
 
 So, the probability of receiving exactly 3 emails in the next hour is approximately 0.1404, or 14.04%.
 
-\section{Chi-Square Test}
-The Chi-Square test is a statistical test used to determine if there is a significant association between categorical variables. It compares the observed frequencies in each category to the frequencies expected if there were no association between the variables.
-
-\subsection{Chi-Square Test for Independence}
-The Chi-Square test for independence assesses whether two categorical variables are independent. The test statistic is calculated as:
-\[
-\chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}
-\]
-where:
-- \(O_i\) is the observed frequency in category \(i\)
-- \(E_i\) is the expected frequency in category \(i\), calculated as \(E_i = \frac{(row\ total \times column\ total)}{grand\ total}\)
-
-\subsection{Example: Chi-Square Test for Independence}
-Suppose we want to test if there is an association between gender (male, female) and preference for a new product (like, dislike). We collect data from a sample of 100 people, and the observed frequencies are as follows:
-
-\begin{tabular}{|c|c|c|}
-\hline
- & Like & Dislike \\
-\hline
-Male & 30 & 20 \\
-\hline
-Female & 10 & 40 \\
-\hline
-\end{tabular}
-
-The expected frequencies are calculated as:
-\[
-E_{11} = \frac{(50 \times 40)}{100} = 20, \quad E_{12} = \frac{(50 \times 60)}{100} = 30
-\]
-\[
-E_{21} = \frac{(50 \times 40)}{100} = 20, \quad E_{22} = \frac{(50 \times 60)}{100} = 30
-\]
-
-The test statistic is:
-\[
-\chi^2 = \frac{(30 - 20)^2}{20} + \frac{(20 - 30)^2}{30} + \frac{(10 - 20)^2}{20} + \frac{(40 - 30)^2}{30} = 10
-\]
-
-Using a Chi-Square distribution table with 1 degree of freedom, we find the p-value corresponding to \(\chi^2 = 10\). If the p-value is less than the chosen significance level (e.g., 0.05), we reject the null hypothesis and conclude that there is a significant association between gender and product preference.
-
-\subsection{Chi-Square Goodness of Fit Test}
-The Chi-Square goodness of fit test determines if a sample data matches a population with a specific distribution. The test statistic is calculated similarly:
-\[
-\chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}
-\]
-where \(O_i\) and \(E_i\) are the observed and expected frequencies, respectively.
-
-\subsection{Example: Chi-Square Goodness of Fit Test}
-Suppose we want to test if a six-sided die is fair. We roll the die 60 times, and the observed frequencies are as follows: 8, 10, 12, 11, 9, 10.
-
-The expected frequency for each side is \(E_i = \frac{60}{6} = 10\).
-
-The test statistic is:
-\[
-\chi^2 = \frac{(8 - 10)^2}{10} + \frac{(10 - 10)^2}{10} + \frac{(12 - 10)^2}{10} + \frac{(11 - 10)^2}{10} + \frac{(9 - 10)^2}{10} + \frac{(10 - 10)^2}{10} = 1.4
-\]
-
-Using a Chi-Square distribution table with 5 degrees of freedom, we find the p-value corresponding to \(\chi^2 = 1.4\). If the p-value is greater than the chosen significance level (e.g., 0.05), we fail to reject the null hypothesis and conclude that the die is fair.
-
-The Chi-Square test is a versatile tool for analyzing categorical data and can be used in various applications, including testing for independence and goodness of fit.
-
 \section{Confidence Intervals}
 A confidence interval is a range of values, derived from sample statistics, that is likely to contain the value of an unknown population parameter. The interval has an associated confidence level that quantifies the level of confidence that the parameter lies within the interval.
 
@@ -574,5 +565,143 @@ Calculate the \(F\)-value and compare it to the critical value to determine if t
 
 ANOVA helps in identifying whether the differences in sample means are due to actual differences in the population means or just random variation.
 
+\section{Principal Component Analysis}
+Principal Component Analysis (PCA) is a dimensionality reduction technique used to transform a large set of variables into a smaller one that still contains most of the information in the large set. It is widely used in data analysis and machine learning for feature extraction and data visualization.
+
+\subsection{Steps in PCA}
+The steps involved in performing PCA are as follows:
+\begin{enumerate}
+    \item \textbf{Standardize the Data:} Standardize the dataset to have a mean of zero and a standard deviation of one. This ensures that each variable contributes equally to the analysis.
+    \[
+    z_{ij} = \frac{x_{ij} - \bar{x}_j}{s_j}
+    \]
+    where \(x_{ij}\) is the value of the \(i\)-th observation and \(j\)-th variable, \(\bar{x}_j\) is the mean of the \(j\)-th variable, and \(s_j\) is the standard deviation of the \(j\)-th variable.
+
+    \item \textbf{Compute the Covariance Matrix:} Calculate the covariance matrix to understand how the variables in the dataset are related to each other.
+    \[
+    \mathbf{C} = \frac{1}{n-1} \sum_{i=1}^{n} (\mathbf{z}_i - \bar{\mathbf{z}})(\mathbf{z}_i - \bar{\mathbf{z}})^T
+    \]
+    where \(\mathbf{z}_i\) is the standardized data vector of the \(i\)-th observation, and \(\bar{\mathbf{z}}\) is the mean vector of the standardized data.
+
+    \item \textbf{Compute the Eigenvalues and Eigenvectors:} Calculate the eigenvalues and eigenvectors of the covariance matrix. The eigenvectors represent the directions of the principal components, and the eigenvalues represent the magnitude of the variance in these directions.
+    \[
+    \mathbf{C} \mathbf{v} = \lambda \mathbf{v}
+    \]
+    where \(\mathbf{v}\) is the eigenvector and \(\lambda\) is the eigenvalue.
+
+    \item \textbf{Sort Eigenvalues and Eigenvectors:} Sort the eigenvalues in descending order and arrange the corresponding eigenvectors accordingly. The eigenvectors with the largest eigenvalues are the principal components.
+
+    \item \textbf{Transform the Data:} Project the original data onto the principal components to obtain the transformed dataset.
+    \[
+    \mathbf{Z}_{\text{PCA}} = \mathbf{Z} \mathbf{V}
+    \]
+    where \(\mathbf{Z}\) is the standardized data matrix, and \(\mathbf{V}\) is the matrix of eigenvectors.
+
+\end{enumerate}
+
+\subsection{Choosing the Number of Principal Components}
+The number of principal components to retain can be determined by examining the cumulative explained variance. The explained variance for each principal component is given by the ratio of its eigenvalue to the sum of all eigenvalues. The cumulative explained variance is the sum of the explained variances of the principal components.
+
+\[
+\text{Explained Variance} = \frac{\lambda_i}{\sum_{j=1}^{p} \lambda_j}
+\]
+
+\[
+\text{Cumulative Explained Variance} = \sum_{i=1}^{k} \frac{\lambda_i}{\sum_{j=1}^{p} \lambda_j}
+\]
+
+Typically, the number of principal components is chosen such that the cumulative explained variance exceeds a certain threshold (e.g., 95\%).
+
+\subsection{Example: PCA on a Sample Dataset}
+Suppose we have a dataset with three variables and five observations:
+
+\[
+\begin{array}{ccc}
+\text{Variable 1} & \text{Variable 2} & \text{Variable 3} \\
+2.5 & 2.4 & 3.5 \\
+0.5 & 0.7 & 1.2 \\
+2.2 & 2.9 & 3.1 \\
+1.9 & 2.2 & 2.9 \\
+3.1 & 3.0 & 3.7 \\
+\end{array}
+\]
+
+\begin{enumerate}
+    \item \textbf{Standardize the Data:}
+    \[
+    \begin{array}{ccc}
+    0.87 & 0.83 & 0.92 \\
+    -1.43 & -1.42 & -1.36 \\
+    0.63 & 1.18 & 0.68 \\
+    0.28 & 0.13 & 0.48 \\
+    1.65 & 1.72 & 1.72 \\
+    \end{array}
+    \]
+
+    \item \textbf{Compute the Covariance Matrix:}
+    \[
+    \mathbf{C} = \begin{pmatrix}
+    1.0 & 0.99 & 0.98 \\
+    0.99 & 1.0 & 0.97 \\
+    0.98 & 0.97 & 1.0 \\
+    \end{pmatrix}
+    \]
+
+    \item \textbf{Compute the Eigenvalues and Eigenvectors:}
+    \[
+    \lambda = \begin{pmatrix}
+    2.97 & 0.03 & 0.00 \\
+    \end{pmatrix}
+    \]
+
+    \[
+    \mathbf{V} = \begin{pmatrix}
+    0.58 & -0.58 & 0.58 \\
+    0.58 & 0.58 & -0.58 \\
+    0.58 & -0.58 & -0.58 \\
+    \end{pmatrix}
+    \]
+
+    \item \textbf{Transform the Data:}
+    \[
+    \mathbf{Z}_{\text{PCA}} = \mathbf{Z} \mathbf{V} = \begin{pmatrix}
+    1.5 & -0.5 & 0.0 \\
+    -2.5 & 0.5 & 0.0 \\
+    1.0 & 1.0 & 0.0 \\
+    0.5 & -0.5 & 0.0 \\
+    2.5 & -0.5 & 0.0 \\
+    \end{pmatrix}
+    \]
+
+\end{enumerate}
+
+In this example, the first principal component explains most of the variance in the data, and the transformed dataset is now represented in terms of the principal components.
+
+\section{t-Distributed Stochastic Neighbor Embedding (t-SNE)}
+t-Distributed Stochastic Neighbor Embedding (t-SNE) is a nonlinear dimensionality reduction technique used for visualizing high-dimensional data. It is particularly well-suited for embedding high-dimensional data into a 2D or 3D space for visualization.
+
+\subsection{How t-SNE Works}
+t-SNE works by minimizing the divergence between two distributions: one that measures pairwise similarities of the input objects in the high-dimensional space and one that measures pairwise similarities of the corresponding low-dimensional points. The algorithm consists of the following steps:
+\begin{enumerate}
+    \item \textbf{Compute Pairwise Similarities:} Compute pairwise similarities between data points in the high-dimensional space using a Gaussian distribution. For each pair of data points \(i\) and \(j\), the similarity \(p_{ij}\) is given by:
+    \[
+    p_{ij} = \frac{\exp\left(-\frac{\|x_i - x_j\|^2}{2\sigma_i^2}\right)}{\sum_{k \neq i} \exp\left(-\frac{\|x_i - x_k\|^2}{2\sigma_i^2}\right)}
+    \]
+    where \(\sigma_i\) is the bandwidth parameter for point \(i\), determined using a perplexity parameter.
+
+    \item \textbf{Compute Low-Dimensional Embedding:} Initialize the low-dimensional points \(y_i\) randomly and compute pairwise similarities using a Student's t-distribution. The similarity \(q_{ij}\) in the low-dimensional space is given by:
+    \[
+    q_{ij} = \frac{\left(1 + \|y_i - y_j\|^2\right)^{-1}}{\sum_{k \neq l} \left(1 + \|y_k - y_l\|^2\right)^{-1}}
+    \]
+
+    \item \textbf{Minimize Kullback-Leibler Divergence:} Minimize the Kullback-Leibler divergence between the high-dimensional and low-dimensional similarity distributions using gradient descent. The Kullback-Leibler divergence \(KL(P \| Q)\) is given by:
+    \[
+    KL(P \| Q) = \sum_{i \neq j} p_{ij} \log \frac{p_{ij}}{q_{ij}}
+    \]
+    The gradient of the Kullback-Leibler divergence with respect to the low-dimensional points \(y_i\) is:
+    \[
+    \frac{\partial KL}{\partial y_i} = 4 \sum_{j \neq i} \left(p_{ij} - q_{ij}\right) \left(y_i - y_j\right) \left(1 + \|y_i - y_j\|^2\right)^{-1}
+    \]
+\end{enumerate}
 
 \end{document}

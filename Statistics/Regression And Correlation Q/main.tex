@@ -1,0 +1,142 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+
+\title{Regression and Correlation Questions}
+\author{Devesh Nath}
+\date{}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\maketitle
+
+\section{Questions}
+
+\subsection{How do you interpret the coefficients in a linear regression?}
+
+In a linear regression model, the coefficients represent the relationship between each independent variable and the dependent variable. Specifically, a coefficient indicates the expected change in the dependent variable for a one-unit change in the corresponding independent variable, holding all other variables constant. For example, if the coefficient of a variable is 2, it means that for every one-unit increase in that variable, the dependent variable is expected to increase by 2 units, assuming other variables remain unchanged.
+
+\subsection{What is the difference between correlation and causation?}
+
+Correlation refers to a statistical relationship between two variables, where changes in one variable are associated with changes in another. However, correlation does not imply that one variable causes the other to change. Causation, on the other hand, implies that one variable directly affects the other. Establishing causation requires more rigorous analysis, often involving controlled experiments or longitudinal studies to rule out confounding factors and ensure that the observed relationship is not due to chance or external influences.
+
+\subsection{Define multicollinearity and describe how to detect it.}
+
+Multicollinearity occurs when two or more independent variables in a regression model are highly correlated, meaning they provide redundant information about the response variable. This can lead to unreliable estimates of the regression coefficients, making it difficult to determine the individual effect of each predictor.
+
+To detect multicollinearity, you can:
+\begin{itemize}
+    \item Calculate the Variance Inflation Factor (VIF) for each predictor. A VIF value greater than 10 indicates high multicollinearity.
+    \item Examine the correlation matrix of the predictors. High correlation coefficients (close to 1 or -1) suggest multicollinearity.
+    \item Check the condition index, where values above 30 indicate potential multicollinearity.
+\end{itemize}
+
+\subsection{How would you handle multicollinearity in a regression model?}
+
+To handle multicollinearity, you can:
+\begin{itemize}
+    \item Remove one of the highly correlated predictors from the model.
+    \item Combine the correlated variables into a single predictor through techniques like Principal Component Analysis (PCA).
+    \item Use regularization methods such as Ridge Regression or Lasso Regression, which can shrink the coefficients of correlated predictors.
+    \item Collect more data to reduce the standard errors of the coefficient estimates.
+\end{itemize}
+
+\subsection{What is logistic regression, and when would you use it?}
+
+Logistic regression is a type of regression analysis used for predicting the outcome of a categorical dependent variable based on one or more independent variables. It is commonly used when the dependent variable is binary (i.e., it has two possible outcomes, such as success/failure or yes/no). Logistic regression estimates the probability that a given input point belongs to a certain class. The model uses the logistic function to constrain the output between 0 and 1.
+
+\subsection{Explain the concept of regularization in regression.}
+
+Regularization is a technique used to prevent overfitting in regression models by adding a penalty term to the loss function. This penalty term discourages the model from fitting the noise in the training data by shrinking the regression coefficients. The two most common types of regularization are Lasso (Least Absolute Shrinkage and Selection Operator) and Ridge regression. Regularization helps improve the generalization of the model to new, unseen data.
+
+\subsection{What is the difference between Lasso and Ridge regression?}
+
+The main difference between Lasso and Ridge regression lies in the type of penalty they use:
+\begin{itemize}
+    \item \textbf{Lasso Regression:} Uses an L1 penalty, which is the sum of the absolute values of the coefficients. This penalty can shrink some coefficients to exactly zero, effectively performing variable selection by excluding some predictors from the model.
+    \item \textbf{Ridge Regression:} Uses an L2 penalty, which is the sum of the squared values of the coefficients. This penalty shrinks the coefficients towards zero but does not set any of them exactly to zero, meaning all predictors remain in the model.
+\end{itemize}
+
+\subsection{How do you handle outliers in a regression analysis?}
+
+To handle outliers in a regression analysis, you can:
+\begin{itemize}
+    \item \textbf{Identify and remove outliers:} Use statistical tests or visualization techniques (e.g., box plots, scatter plots) to detect outliers and remove them if they are deemed to be errors or not representative of the population.
+    \item \textbf{Transform the data:} Apply transformations (e.g., log, square root) to reduce the impact of outliers.
+    \item \textbf{Use robust regression methods:} Employ regression techniques that are less sensitive to outliers, such as robust regression or quantile regression.
+    \item \textbf{Cap or floor the outliers:} Set a threshold to limit the influence of extreme values by capping or flooring them.
+\end{itemize}
+
+\subsection{What is the purpose of polynomial regression?}
+
+Polynomial regression is used to model the relationship between the independent variable(s) and the dependent variable as an nth-degree polynomial. It is useful when the data shows a nonlinear relationship that cannot be captured by a simple linear model. By adding polynomial terms (e.g., squared, cubed terms) to the regression equation, polynomial regression can fit more complex curves to the data, providing a better fit for nonlinear patterns.
+
+\subsection{Explain the difference between simple linear regression and multiple regression.}
+
+Simple linear regression involves a single independent variable and a dependent variable, modeling their relationship with a straight line. The equation for simple linear regression is \( y = \beta_0 + \beta_1 x + \epsilon \), where \( y \) is the dependent variable, \( x \) is the independent variable, \( \beta_0 \) is the intercept, \( \beta_1 \) is the slope, and \( \epsilon \) is the error term.
+
+Multiple regression, on the other hand, involves two or more independent variables. The equation for multiple regression is \( y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \ldots + \beta_n x_n + \epsilon \), where \( y \) is the dependent variable, \( x_1, x_2, \ldots, x_n \) are the independent variables, \( \beta_0 \) is the intercept, \( \beta_1, \beta_2, \ldots, \beta_n \) are the coefficients, and \( \epsilon \) is the error term.
+
+\subsection{How do you interpret the odds ratio in logistic regression?}
+
+In logistic regression, the odds ratio represents the change in odds of the dependent event occurring for a one-unit increase in the independent variable. An odds ratio greater than 1 indicates that the event is more likely to occur as the independent variable increases, while an odds ratio less than 1 indicates that the event is less likely to occur. An odds ratio of 1 means there is no effect of the independent variable on the odds of the event.
+
+\subsection{What is a residual, and why is it important in regression analysis?}
+
+A residual is the difference between the observed value of the dependent variable and the value predicted by the regression model. Mathematically, it is expressed as \( e_i = y_i - \hat{y}_i \), where \( e_i \) is the residual, \( y_i \) is the observed value, and \( \hat{y}_i \) is the predicted value.
+
+Residuals are important because they provide information about the accuracy of the model. Analyzing residuals helps in diagnosing potential problems with the model, such as non-linearity, heteroscedasticity, and outliers. Ideally, residuals should be randomly distributed with a mean of zero, indicating a good fit of the model to the data.
+
+\subsection{Describe the difference between bias and variance in modeling.}
+
+Bias refers to the error introduced by approximating a real-world problem, which may be complex, by a simplified model. High bias can cause the model to underfit the data, missing important patterns.
+
+Variance refers to the error introduced by the model's sensitivity to small fluctuations in the training data. High variance can cause the model to overfit the data, capturing noise along with the underlying pattern.
+
+The trade-off between bias and variance is crucial in building models that generalize well to new data. Ideally, a model should have low bias and low variance, but in practice, reducing one often increases the other.
+
+\subsection{What is cross-validation, and how is it used in regression?}
+
+Cross-validation is a technique used to assess the performance of a regression model by partitioning the data into subsets, training the model on some subsets (training set), and validating it on the remaining subsets (validation set). This process is repeated multiple times to ensure that the model's performance is consistent and not dependent on a particular split of the data. The most common types of cross-validation are k-fold cross-validation and leave-one-out cross-validation.
+
+In k-fold cross-validation, the data is divided into k equally sized folds. The model is trained on k-1 folds and validated on the remaining fold. This process is repeated k times, with each fold serving as the validation set once. The results are averaged to provide an overall performance estimate.
+
+Cross-validation helps in selecting the best model and tuning hyperparameters by providing a more reliable estimate of the model's performance on unseen data.
+
+\subsection{How would you implement stepwise regression?}
+
+Stepwise regression is a method of selecting the most significant variables for a regression model by adding or removing predictors based on their statistical significance. There are three main types of stepwise regression: forward selection, backward elimination, and bidirectional elimination.
+
+\begin{itemize}
+    \item \textbf{Forward Selection:} Start with no predictors in the model. Add the predictor with the highest statistical significance (lowest p-value) one at a time. Continue adding predictors until no additional predictors significantly improve the model.
+    \item \textbf{Backward Elimination:} Start with all potential predictors in the model. Remove the predictor with the least statistical significance (highest p-value) one at a time. Continue removing predictors until all remaining predictors are statistically significant.
+    \item \textbf{Bidirectional Elimination:} Combine forward selection and backward elimination. Add predictors as in forward selection, but after adding each predictor, check if any of the previously added predictors can be removed as in backward elimination.
+\end{itemize}
+
+Stepwise regression can be implemented using statistical software packages such as R or Python's statsmodels library.
+
+\subsection{What is the difference between overfitting and underfitting?}
+
+Overfitting occurs when a regression model captures not only the underlying pattern in the data but also the noise. This results in a model that performs well on the training data but poorly on new, unseen data. Overfitting is characterized by high variance and low bias.
+
+Underfitting occurs when a regression model is too simple to capture the underlying pattern in the data. This results in a model that performs poorly on both the training data and new data. Underfitting is characterized by high bias and low variance.
+
+The goal is to find a balance between overfitting and underfitting, achieving a model that generalizes well to new data.
+
+\subsection{How do you choose the best model for a regression analysis?}
+
+Choosing the best model for a regression analysis involves several steps:
+
+\begin{itemize}
+    \item \textbf{Evaluate Model Performance:} Use metrics such as R-squared, adjusted R-squared, Mean Squared Error (MSE), Root Mean Squared Error (RMSE), and Mean Absolute Error (MAE) to assess the model's performance.
+    \item \textbf{Cross-Validation:} Perform cross-validation to ensure the model's performance is consistent and not dependent on a particular split of the data.
+    \item \textbf{Check Assumptions:} Verify that the model meets the assumptions of regression analysis, such as linearity, independence, homoscedasticity, and normality of residuals.
+    \item \textbf{Model Complexity:} Consider the complexity of the model. A simpler model with fewer predictors may be preferred if it performs similarly to a more complex model.
+    \item \textbf{Regularization:} Use regularization techniques like Lasso or Ridge regression to prevent overfitting and improve model generalization.
+    \item \textbf{Domain Knowledge:} Incorporate domain knowledge to ensure the model makes sense in the context of the problem being solved.
+\end{itemize}
+
+By combining these steps, you can select the best model that balances performance, complexity, and interpretability.
+
+\end{document}
