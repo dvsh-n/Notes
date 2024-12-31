@@ -4,4 +4,5 @@
 !*.tex
 !*.py
 !*ipynb
+!*.png
 !*/
