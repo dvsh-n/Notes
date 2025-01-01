@@ -45,6 +45,43 @@ Sentiment classification is the task of classifying the sentiment expressed in a
 \subsection{GloVe}
 GloVe (Global Vectors for Word Representation) is another method for learning word embeddings developed by Stanford. Unlike Word2Vec, which relies on local context windows, GloVe leverages global word co-occurrence statistics from a corpus to learn word vectors. This allows GloVe to capture both local and global statistical information about words, resulting in more accurate word representations.
 
+\subsection{Bag of Words (BoW)}
+Bag of Words (BoW) is a simple and commonly used model for text representation in natural language processing. In the BoW model, a text (such as a sentence or a document) is represented as an unordered collection of words, disregarding grammar and word order but keeping multiplicity.
+
+\subsubsection{How It Works}
+The BoW model works as follows:
+\begin{enumerate}
+    \item \textbf{Tokenization}: The text is split into individual words (tokens).
+    \item \textbf{Vocabulary Creation}: A vocabulary of all unique words in the text corpus is created.
+    \item \textbf{Vector Representation}: Each text is represented as a vector of word frequencies, where each element of the vector corresponds to a word in the vocabulary and the value represents the number of times that word appears in the text.
+\end{enumerate}
+
+For example, consider the following two sentences:
+\begin{itemize}
+    \item Sentence 1: "I love machine learning"
+    \item Sentence 2: "Machine learning is great"
+\end{itemize}
+
+The vocabulary would be: \{I, love, machine, learning, is, great\}. The BoW vectors for the sentences would be:
+\begin{itemize}
+    \item Sentence 1: [1, 1, 1, 1, 0, 0]
+    \item Sentence 2: [0, 0, 1, 1, 1, 1]
+\end{itemize}
+
+The BoW model is simple and easy to implement, but it has some limitations, such as ignoring word order and context, which can be addressed by more advanced models like word embeddings and transformers.
+
+\subsection{Stemming and Lemmatization}
+Stemming and lemmatization are techniques used in natural language processing to reduce words to their base or root form. This process helps in normalizing the text, which can improve the performance of various NLP tasks by reducing the dimensionality of the data.
+
+\subsubsection{Stemming}
+Stemming is a heuristic process that removes the suffixes from words to obtain their root form. The resulting stems may not be actual words, but they are useful for reducing the number of unique words in the text. Common stemming algorithms include the Porter Stemmer, Snowball Stemmer, and Lancaster Stemmer.
+
+\subsubsection{Lemmatization}
+Lemmatization is a more sophisticated process that reduces words to their base or dictionary form, known as the lemma. Unlike stemming, lemmatization considers the context and part of speech of the word to ensure that the root form is a valid word. Lemmatization typically requires a lexical database, such as WordNet, to look up the correct lemma for each word.
+
+\subsubsection{Comparison}
+While both stemming and lemmatization aim to reduce words to their base form, lemmatization is generally more accurate as it produces valid words. However, stemming is computationally less expensive and faster. The choice between stemming and lemmatization depends on the specific requirements of the NLP task and the trade-off between accuracy and computational efficiency.
+
 \section{Attention Mechanism}
 The attention mechanism is a technique in neural networks that allows the model to focus on specific parts of the input sequence when making predictions. This is particularly useful for tasks where different parts of the input may have varying levels of importance. The attention mechanism has been widely adopted in various sequence modeling tasks, including machine translation, speech recognition, and image captioning.
 

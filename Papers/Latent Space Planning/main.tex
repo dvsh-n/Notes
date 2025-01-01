@@ -25,6 +25,13 @@ TAP reasons about the trajectory as a whole because every latent represents L se
 
 The latent is learned using a state conditioned (gets the first state as input) VQ-VAE, so the latent space is discrete. Causal transformers are used for the encoder, decoder and the prior policy. The policy is trained to maximize the expected return (g) and uses Monte carlo Sampling to estimate the gradient.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{/home/devesh/Notes/Papers/Latent Space Planning/3.png}
+    \caption{}
+    \label{fig:tap}
+\end{figure}
+
 \newpage
 \section{Learning Predictive Representations for Deformable Objects Using Contrastive Estimation}
 In this paper they learn the latent dynamics of a deformable object (rope and cloth) using contrastive estimation (InfoNCE Loss). The latent model and the forward model are trained jointly.
@@ -105,5 +112,46 @@ h(\phi(x(t))) = \nabla \phi(x)^T f(x)
 \end{figure}
 
 \newpage
+\section{Robot Motion Planning in Learned Latent Spaces}
+They have an autoencoder that converts \(x_{t}\) to \(z_{t}\) and a forward model that predicts \(z_{t+1}\) from \(z_{t}\) and \(a_{t}\). A latent dynamics model that predicts \(z_{t+1}\) from \(z_{t}\) and \(u_{t}\) is trained. Lastly, a collision checking model is trained that takes in observations of any form, \(z_{t}\) and \(z_{t+1}\) to retrn either 0 or 1 indiciating if the latent states.
+
+They sample points in the state space and create latent space samples. They then use those samples for RRT. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{/home/devesh/Notes/Papers/Latent Space Planning/4.png}
+    \caption{}
+    \label{}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/devesh/Notes/Papers/Latent Space Planning/5.png}
+        \caption{}
+        \label{}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{/home/devesh/Notes/Papers/Latent Space Planning/6.png}
+        \caption{}
+        \label{}
+    \end{minipage}
+\end{figure}
+
+\newpage
+\section{Learning Latent Dynamics for Planning from Pixels}
+They propose a method to learn latent dynamics directly from pixel observations. The method involves training a latent dynamics model that can predict future latent states from current latent states and actions. This approach allows for planning directly in the latent space, which is more compact and structured than the raw pixel space.
+
+The latent dynamics model is trained using a combination of reconstruction loss and a dynamics loss. The reconstruction loss ensures that the latent space captures the essential information from the pixel observations, while the dynamics loss ensures that the latent space captures the temporal dynamics of the system.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{/home/devesh/Notes/Papers/Latent Space Planning/7.png}
+    \caption{}
+    \label{}
+\end{figure}
 
 \end{document}
