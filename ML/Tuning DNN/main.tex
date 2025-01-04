@@ -58,6 +58,42 @@ Batch normalization is a technique that normalizes the inputs of each layer to h
 \subsection{Data Augmentation}
 Data augmentation involves generating additional training data by applying random transformations such as rotations, translations, and flips to the existing data. This helps improve the generalization of the model by exposing it to a wider variety of input patterns and reducing overfitting.
 
+\section{Evaluation Metrics}
+Evaluating the performance of DNNs involves using various metrics to measure how well the model is performing. Common evaluation metrics include accuracy, precision, recall, F1-score, and ROC-AUC.
+
+\subsection{Accuracy}
+Accuracy is the ratio of correctly predicted instances to the total instances. It is a simple and widely used metric for classification tasks:
+\[
+\text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions}}
+\]
+
+\subsection{Precision}
+Precision, also known as positive predictive value, measures the proportion of true positive predictions among all positive predictions:
+\[
+\text{Precision} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}
+\]
+
+\subsection{Recall}
+Recall, also known as sensitivity or true positive rate, measures the proportion of true positive predictions among all actual positive instances:
+\[
+\text{Recall} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}
+\]
+
+\subsection{F1-Score}
+The F1-score is the harmonic mean of precision and recall, providing a single metric that balances both:
+\[
+\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+\]
+
+\subsection{ROC-AUC}
+The Receiver Operating Characteristic (ROC) curve plots the true positive rate against the false positive rate at various threshold settings. The Area Under the ROC Curve (AUC) provides a single measure of the model's performance across all thresholds:
+\[
+\text{ROC-AUC} = \int_{0}^{1} \text{ROC}(t) \, dt
+\]
+where \( \text{ROC}(t) \) is the true positive rate at threshold \( t \).
+
+These evaluation metrics provide a comprehensive understanding of the model's performance, helping to identify strengths and weaknesses in different aspects of the classification task.
+
 \section{Optimization Algorithms}
 Choosing the right optimization algorithm is essential for training DNNs efficiently. Commonly used optimization algorithms are:
 \begin{itemize}
