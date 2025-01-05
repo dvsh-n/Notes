@@ -91,6 +91,16 @@ Gating mechanisms \(\sigma_n(t) \in (0, 1)\) control when specific dynamics \(f_
 \[
 \frac{dz}{dt} = \sum_{n} \sigma_n(t) f_n(z).
 \]
-This makes the model more interpretable and adaptable to the structure of the data. In both NFs and CNFs, hidden units correspond to neurons (i.e., individual computational units in the parameterizing neural network).
-The layers in discrete NFs correspond to discrete transformations, whereas in CNFs, the transformation is continuous, so there are no explicit "layers"—only a time-evolving flow parameterized by the hidden units.
+This makes the model more interpretable and adaptable to the structure of the data. 
+
+\subsection{Neural ODEs and CNFs}
+\begin{itemize}
+    \item Neural ODE Dynamics: $\frac{dz(t)}{dt} = f(z(t), t, \theta)$
+    \item Data: $\{z(t_0), z(t_1), \ldots, z(t_N)\}$ (may be irregular and not fill all the timsteps)
+    \item Probability density evolution: $\frac{\partial \log p(z(t))}{\partial t} = -\mathrm{tr}\left(\frac{\partial f}{\partial z(t)}\right)$
+    \item Likelihood maximization objective: $\log p(z(T)) = \log p(z(t_0)) - \int_{t_0}^{T} \mathrm{tr}\left(\frac{\partial f}{\partial z(t)}\right) \, dt$
+    \item Use the adjoint dynamics method used in Neural ODEs to get a continuous state dynamics trajectory $z(t)$ based on data. 
+    \item Use the continuous state dynamics to calculate the gradient of the parameters $\theta$ using loss from the likelihood maximization objective.
+\end{itemize}
+
 \end{document}
