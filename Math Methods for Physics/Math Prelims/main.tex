@@ -1,0 +1,489 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\title{Math Methods for Physics: Math Prelims}
+\author{Devesh Nath}
+\date{\today}
+
+\maketitle
+
+\section{Infinite Series}
+
+\subsection{Fundamental Concepts}
+An infinite series is defined using partial sums. For a sequence \(u_1, u_2, u_3, \dots\), the \(i\)-th partial sum is 
+\[
+s_i = \sum_{n=1}^i u_n.
+\]
+If the partial sums converge to a finite limit \(S\) as \(i \to \infty\), the series 
+\[
+\sum_{n=1}^\infty u_n
+\]
+is said to converge to \(S\). A necessary condition for convergence is \(\lim_{n \to \infty} u_n = 0\), but this is not sufficient. 
+
+The Cauchy criterion states that for each \(\epsilon > 0\), there exists \(N\) such that \(|s_j - s_i| < \epsilon\) for all \(i, j > N\). Divergent series either grow unbounded or oscillate, such as 
+\[
+\sum_{n=1}^\infty (-1)^n,
+\]
+which does not converge to a limit.
+
+\paragraph{Examples}
+
+\paragraph{Geometric Series}
+A geometric series is of the form 
+\[
+\sum_{n=0}^\infty ar^n,
+\]
+where \(a\) is the first term and \(r\) is the common ratio. The series converges if \(|r| < 1\) and its sum is given by
+\[
+\sum_{n=0}^\infty ar^n = \frac{a}{1-r}.
+\]
+For example, if \(a = 1\) and \(r = \frac{1}{2}\), the series becomes
+\[
+\sum_{n=0}^\infty \frac{1}{2^n} = 2.
+\]
+
+\paragraph{Harmonic Series}
+The harmonic series is given by
+\[
+\sum_{n=1}^\infty \frac{1}{n}.
+\]
+This series diverges, as the partial sums grow without bound. Although the terms \(\frac{1}{n}\) approach zero as \(n \to \infty\), the series does not satisfy the Cauchy criterion for convergence.
+
+\subsection{Cauchy Root Test}
+The Cauchy root test determines the convergence of a series by examining the \(n\)-th root of the terms. For a series 
+\[
+\sum_{n=1}^\infty u_n,
+\]
+define 
+\[
+\limsup_{n \to \infty} \sqrt[n]{|u_n|} = L.
+\]
+\begin{itemize}
+    \item If \(L < 1\), the series converges absolutely.
+    \item If \(L > 1\), the series diverges.
+    \item If \(L = 1\), the test is inconclusive.
+\end{itemize}
+
+\subsection{Comparison Test}
+The comparison test compares a given series to a second series with known convergence properties. For two series 
+\[
+\sum_{n=1}^\infty u_n \quad \text{and} \quad \sum_{n=1}^\infty v_n,
+\]
+where \(u_n, v_n \geq 0\) for all \(n\):
+\begin{itemize}
+    \item If \(u_n \leq v_n\) for all \(n\) and \(\sum v_n\) converges, then \(\sum u_n\) also converges.
+    \item If \(u_n \geq v_n\) for all \(n\) and \(\sum v_n\) diverges, then \(\sum u_n\) also diverges.
+\end{itemize}
+
+\subsection{D'Alembert Ratio Test}
+The D'Alembert ratio test examines the ratio of successive terms in a series. For a series 
+\[
+\sum_{n=1}^\infty u_n,
+\]
+define 
+\[
+\lim_{n \to \infty} \left| \frac{u_{n+1}}{u_n} \right| = L.
+\]
+\begin{itemize}
+    \item If \(L < 1\), the series converges absolutely.
+    \item If \(L > 1\), the series diverges.
+    \item If \(L = 1\), the test is inconclusive.
+\end{itemize}
+
+\subsection{Cauchy (or Maclaurin) Integral Test}
+The Cauchy (or Maclaurin) integral test relates the convergence of a series to the convergence of an improper integral. For a series 
+\[
+\sum_{n=1}^\infty u_n,
+\]
+where \(u_n = f(n)\) and \(f(x)\) is a positive, continuous, and decreasing function for \(x \geq 1\), the test states:
+\[
+\sum_{n=1}^\infty u_n \quad \text{converges if and only if} \quad \int_1^\infty f(x) \, dx \quad \text{converges.}
+\]
+
+\paragraph{Example}
+Consider the series 
+\[
+\sum_{n=1}^\infty \frac{1}{n^p},
+\]
+where \(f(x) = \frac{1}{x^p}\). The corresponding integral is
+\[
+\int_1^\infty \frac{1}{x^p} \, dx.
+\]
+\begin{itemize}
+    \item If \(p > 1\), the integral converges, and so does the series.
+    \item If \(p \leq 1\), the integral diverges, and so does the series.
+\end{itemize}
+
+\paragraph{Example: Riemann Zeta Function}
+The Riemann zeta function is defined by
+\[
+\zeta(p) = \sum_{n=1}^\infty n^{-p},
+\]
+provided the series converges. We may take \(f(x) = x^{-p}\), and then
+\[
+\int_1^\infty x^{-p} \, dx = 
+\begin{cases} 
+\frac{x^{-p+1}}{-p+1} \bigg|_1^\infty = \frac{1}{p-1}, & p > 1, \\
+\ln x \bigg|_1^\infty, & p = 1.
+\end{cases}
+\]
+The integral, and therefore the series, diverges for \(p \leq 1\), and converges for \(p > 1\). Hence, the condition \(p > 1\) must accompany the definition of \(\zeta(p)\). This provides an independent proof that the harmonic series (\(p = 1\)) diverges logarithmically. For example, the sum of the first million terms of the harmonic series is approximately \(14.392726\).
+
+While the harmonic series diverges, the combination
+\[
+\gamma = \lim_{n \to \infty} \left( \sum_{m=1}^n m^{-1} - \ln n \right)
+\]
+converges to a limit known as the Euler-Mascheroni constant.
+
+\paragraph{Example: A Slowly Diverging Series}
+Consider the series
+\[
+S = \sum_{n=2}^\infty \frac{1}{n \ln n}.
+\]
+We analyze its convergence using the integral test:
+\[
+\int_2^\infty \frac{1}{x \ln x} \, dx = \int_2^\infty \frac{d(\ln x)}{\ln x} = \ln(\ln x) \bigg|_2^\infty.
+\]
+This integral diverges, indicating that \(S\) is divergent. Note that the divergence is slower than that of the harmonic series because \(n \ln n > n\). However, since \(\ln n\) grows more slowly than \(n^\varepsilon\) for any arbitrarily small \(\varepsilon > 0\), the series diverges even though the series \(\sum n^{-(1+\varepsilon)}\) converges for \(\varepsilon > 0\).
+\subsection{Legendre Series}
+A Legendre series is an expansion of a function in terms of Legendre polynomials \(P_n(x)\), which are orthogonal on the interval \([-1, 1]\) with respect to the weight function \(w(x) = 1\). The series takes the form
+\[
+f(x) = \sum_{n=0}^\infty a_n P_n(x),
+\]
+where the coefficients \(a_n\) are given by
+\[
+a_n = \frac{2n+1}{2} \int_{-1}^1 f(x) P_n(x) \, dx.
+\]
+
+\paragraph{Convergence Test}
+The convergence of a Legendre series depends on the smoothness of the function \(f(x)\) being expanded. If \(f(x)\) is piecewise continuous on \([-1, 1]\), the Legendre series converges to \(f(x)\) at points where \(f(x)\) is continuous, and to the average of the left-hand and right-hand limits at points of discontinuity. If \(f(x)\) is infinitely differentiable, the series converges rapidly, and the coefficients \(a_n\) decay faster than any power of \(n\).
+
+\paragraph{Example}
+Consider the function \(f(x) = x^2\). The Legendre polynomials for \(n = 0, 1, 2\) are:
+\[
+P_0(x) = 1, \quad P_1(x) = x, \quad P_2(x) = \frac{1}{2}(3x^2 - 1).
+\]
+The coefficients are computed as:
+\[
+a_0 = \frac{1}{2} \int_{-1}^1 x^2 \cdot 1 \, dx = \frac{1}{2} \int_{-1}^1 x^2 \, dx = \frac{1}{3},
+\]
+\[
+a_1 = \frac{3}{2} \int_{-1}^1 x^2 \cdot x \, dx = \frac{3}{2} \int_{-1}^1 x^3 \, dx = 0,
+\]
+\[
+a_2 = \frac{5}{2} \int_{-1}^1 x^2 \cdot \frac{1}{2}(3x^2 - 1) \, dx = \frac{5}{2} \left( \frac{3}{2} \int_{-1}^1 x^4 \, dx - \frac{1}{2} \int_{-1}^1 x^2 \, dx \right).
+\]
+Evaluating the integrals:
+\[
+\int_{-1}^1 x^4 \, dx = \frac{2}{5}, \quad \int_{-1}^1 x^2 \, dx = \frac{2}{3},
+\]
+we find
+\[
+a_2 = \frac{5}{2} \left( \frac{3}{2} \cdot \frac{2}{5} - \frac{1}{2} \cdot \frac{2}{3} \right) = \frac{1}{3}.
+\]
+Thus, the Legendre series for \(f(x) = x^2\) is
+\[
+x^2 = \frac{1}{3} P_0(x) + \frac{1}{3} P_2(x) = \frac{1}{3} + \frac{1}{3} \cdot \frac{1}{2}(3x^2 - 1) = \frac{1}{2}(3x^2 - 1).
+\]
+
+\subsection{Alternating Series}
+An alternating series is a series whose terms alternate in sign. A general alternating series can be written as
+\[
+\sum_{n=1}^\infty (-1)^{n-1} a_n,
+\]
+where \(a_n > 0\) for all \(n\). The Alternating Series Test (Leibniz criterion) provides a sufficient condition for the convergence of such series. The test states that the series converges if:
+\begin{itemize}
+    \item \(a_n\) is monotonically decreasing, i.e., \(a_{n+1} \leq a_n\) for all \(n\), and
+    \item \(\lim_{n \to \infty} a_n = 0\).
+\end{itemize}
+
+\paragraph{Example: Alternating Harmonic Series}
+The alternating harmonic series is given by
+\[
+\sum_{n=1}^\infty \frac{(-1)^{n-1}}{n} = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots.
+\]
+Here, \(a_n = \frac{1}{n}\), which is positive, monotonically decreasing, and approaches zero as \(n \to \infty\). Therefore, the series converges by the Alternating Series Test. Its sum is known to be \(\ln 2\), i.e.,
+\[
+\sum_{n=1}^\infty \frac{(-1)^{n-1}}{n} = \ln 2.
+\]
+
+\subsection{Absolute and Conditional Convergence}
+A series 
+\[
+\sum_{n=1}^\infty u_n
+\]
+is said to converge absolutely if the series of absolute values 
+\[
+\sum_{n=1}^\infty |u_n|
+\]
+converges. Absolute convergence implies convergence of the original series. However, the converse is not true; a series may converge without converging absolutely. Such a series is said to converge conditionally.
+
+\paragraph{Example: Alternating Harmonic Series}
+The alternating harmonic series 
+\[
+\sum_{n=1}^\infty \frac{(-1)^{n-1}}{n}
+\]
+converges conditionally because the series of absolute values 
+\[
+\sum_{n=1}^\infty \frac{1}{n}
+\]
+diverges (harmonic series), but the original series converges by the Alternating Series Test.
+
+\subsection{Operations on Series}
+Operations on series include addition, subtraction, multiplication, and term-by-term differentiation or integration. These operations are valid under certain conditions:
+
+\paragraph{Addition and Subtraction}
+If two series 
+\[
+\sum_{n=1}^\infty u_n \quad \text{and} \quad \sum_{n=1}^\infty v_n
+\]
+converge, their sum and difference also converge, and
+\[
+\sum_{n=1}^\infty (u_n \pm v_n) = \sum_{n=1}^\infty u_n \pm \sum_{n=1}^\infty v_n.
+\]
+
+\paragraph{Multiplication (Cauchy Product)}
+The product of two series 
+\[
+\sum_{n=0}^\infty u_n \quad \text{and} \quad \sum_{n=0}^\infty v_n
+\]
+is given by the Cauchy product:
+\[
+\left( \sum_{n=0}^\infty u_n \right) \left( \sum_{n=0}^\infty v_n \right) = \sum_{n=0}^\infty \left( \sum_{k=0}^n u_k v_{n-k} \right).
+\]
+If both series converge absolutely, the Cauchy product also converges to the product of their sums.
+
+\paragraph{Term-by-Term Differentiation and Integration}
+If a power series 
+\[
+\sum_{n=0}^\infty a_n x^n
+\]
+converges for \(|x| < R\), it can be differentiated or integrated term by term within the radius of convergence:
+\[
+\frac{d}{dx} \left( \sum_{n=0}^\infty a_n x^n \right) = \sum_{n=1}^\infty n a_n x^{n-1},
+\]
+\[
+\int \left( \sum_{n=0}^\infty a_n x^n \right) dx = \sum_{n=0}^\infty \frac{a_n x^{n+1}}{n+1} + C.
+\]
+\newpage
+
+\section{Series of Functions}
+
+We extend the concept of infinite series to include cases where each term \(u_n\) is a function of a variable \(x\), i.e., \(u_n = u_n(x)\). The partial sums then become functions of \(x\):
+\[
+s_n(x) = u_1(x) + u_2(x) + \cdots + u_n(x),
+\]
+and the series sum is defined as the limit of the partial sums:
+\[
+\sum_{n=1}^\infty u_n(x) = S(x) = \lim_{n \to \infty} s_n(x).
+\]
+
+\subsection{Uniform Convergence}
+A series \(\sum_{n=1}^\infty u_n(x)\) is said to converge uniformly on an interval \([a, b]\) if, for any \(\epsilon > 0\), there exists an \(N\), independent of \(x \in [a, b]\), such that
+\[
+|S(x) - s_n(x)| < \epsilon \quad \text{for all } n \geq N.
+\]
+This means that the tail of the series can be made arbitrarily small uniformly for all \(x\) in the interval.
+
+\paragraph{Example: Nonuniform Convergence}
+Consider the series
+\[
+S(x) = \sum_{n=0}^\infty (1 - x)x^n
+\]
+on the interval \([0, 1]\). For \(0 \leq x < 1\), the series converges to \(S(x) = 1\), but at \(x = 1\), the series sums to \(S(1) = 0\). Thus, the series is convergent but not uniformly convergent on \([0, 1]\), as the convergence rate depends on \(x\).
+
+This example illustrates that absolute convergence does not imply uniform convergence. Conversely, a series may be uniformly but not absolutely convergent, or it may lack both properties.
+
+\subsection{Weierstrass M Test}
+The Weierstrass M test provides a sufficient condition for uniform convergence of a series of functions. If there exists a sequence of constants \(M_i\) such that \(M_i \geq |u_i(x)|\) for all \(x \in [a, b]\) and \(\sum_{i=1}^\infty M_i\) converges, then the series \(\sum_{i=1}^\infty u_i(x)\) converges uniformly on \([a, b]\).
+
+\paragraph{Proof}
+Since \(\sum_{i=1}^\infty M_i\) converges, for any \(\epsilon > 0\), there exists \(N\) such that for all \(n \geq N\),
+\[
+\sum_{i=n+1}^\infty M_i < \epsilon.
+\]
+Given \(|u_i(x)| \leq M_i\), it follows that
+\[
+\left| S(x) - s_n(x) \right| = \left| \sum_{i=n+1}^\infty u_i(x) \right| \leq \sum_{i=n+1}^\infty |u_i(x)| \leq \sum_{i=n+1}^\infty M_i < \epsilon.
+\]
+Thus, the series \(\sum_{i=1}^\infty u_i(x)\) converges uniformly on \([a, b]\).
+
+\paragraph{Limitations}
+The Weierstrass M test only establishes uniform convergence for series that are also absolutely convergent. Absolute and uniform convergence are distinct concepts, as illustrated in the following example.
+
+\paragraph{Example: Uniformly Convergent Alternating Series}
+Consider the series
+\[
+S(x) = \sum_{n=1}^\infty \frac{(-1)^n}{n + x^2}, \quad -\infty < x < \infty.
+\]
+By the Leibniz criterion, the series converges for all \(x\). However, it is not absolutely convergent because the absolute values of its terms approach those of the divergent harmonic series. Despite this, the series is uniformly convergent on \((-\infty, \infty)\) because
+\[
+|S(x) - s_n(x)| < |u_{n+1}(x)| \leq |u_{n+1}(0)|,
+\]
+where \(u_{n+1}(0)\) is independent of \(x\). Thus, uniform convergence is confirmed.
+
+\subsection{Abel's Test}
+Abel's test provides another criterion for uniform convergence. If \(u_n(x)\) can be expressed as \(a_n f_n(x)\), where:
+\begin{enumerate}
+    \item \(\sum_{n=1}^\infty a_n\) converges,
+    \item \(f_n(x)\) is monotonically decreasing in \(n\) for all \(x \in [a, b]\),
+    \item \(f_n(x)\) is bounded, i.e., \(0 \leq f_n(x) \leq M\) for all \(x \in [a, b]\),
+\end{enumerate}
+then \(\sum_{n=1}^\infty u_n(x)\) converges uniformly on \([a, b]\).
+
+\paragraph{Applications}
+Abel's test is particularly useful for analyzing the convergence of power series and other series with variable-dependent terms.
+
+\subsection{Properties of Uniformly Convergent Series}
+Uniformly convergent series possess several important properties that make them useful in analysis. If a series 
+\[
+\sum_{n=1}^\infty u_n(x)
+\]
+is uniformly convergent on \([a, b]\) and the individual terms \(u_n(x)\) are continuous, then:
+
+\begin{enumerate}
+    \item The series sum \(S(x) = \sum_{n=1}^\infty u_n(x)\) is also continuous on \([a, b]\).
+    \item The series may be integrated term by term, and the integral of the sum equals the sum of the integrals:
+    \[
+    \int_a^b S(x) \, dx = \sum_{n=1}^\infty \int_a^b u_n(x) \, dx.
+    \]
+    \item The derivative of the series sum \(S(x)\) equals the sum of the derivatives of the individual terms:
+    \[
+    \frac{d}{dx} S(x) = \sum_{n=1}^\infty \frac{d}{dx} u_n(x),
+    \]
+    provided the following additional conditions are satisfied:
+    \begin{itemize}
+        \item Each term \(\frac{d}{dx} u_n(x)\) is continuous on \([a, b]\),
+        \item The series \(\sum_{n=1}^\infty \frac{d}{dx} u_n(x)\) is uniformly convergent on \([a, b]\).
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{Remarks}
+Term-by-term integration of a uniformly convergent series requires only the continuity of the individual terms, which is typically satisfied in physical applications. However, term-by-term differentiation is more restrictive and requires additional conditions to ensure validity.
+
+\subsection{Taylor's Expansion}
+Taylor's expansion is a powerful tool for the generation of power series representations of functions. The derivation presented here provides not only the possibility of an expansion into a finite number of terms plus a remainder that may or may not be easy to evaluate, but also the possibility of the expression of a function as an infinite series of powers.
+
+We assume that our function \(f(x)\) has a continuous \(n\)-th derivative in the interval \(a \leq x \leq b\). By integrating this \(n\)-th derivative \(n\) times, we obtain:
+\[
+f(x) = f(a) + (x - a) f'(a) + \frac{(x - a)^2}{2!} f''(a) + \cdots + \frac{(x - a)^{n-1}}{(n-1)!} f^{(n-1)}(a) + R_n,
+\]
+where the remainder \(R_n\) is given by:
+\[
+R_n = \frac{(x - a)^n}{n!} f^{(n)}(\xi),
+\]
+for some \(\xi\) in \([a, x]\), as derived using the mean value theorem of integral calculus.
+
+If the function \(f(x)\) is such that \(\lim_{n \to \infty} R_n = 0\), the expansion becomes Taylor's series:
+\[
+f(x) = f(a) + (x - a) f'(a) + \frac{(x - a)^2}{2!} f''(a) + \cdots = \sum_{n=0}^\infty \frac{(x - a)^n}{n!} f^{(n)}(a).
+\]
+
+This series specifies the value of a function at one point \(x\) in terms of the value of the function and its derivatives at a reference point \(a\). Alternatively, by replacing \(x\) with \(x + h\) and \(a\) with \(x\), we can write:
+\[
+f(x + h) = \sum_{n=0}^\infty \frac{h^n}{n!} f^{(n)}(x).
+\]
+
+\subsection{Power Series}
+Taylor series are often used in situations where the reference point, \(a\), is assigned the value zero. In that case, the expansion is referred to as a Maclaurin series, and Eq. (1.40) becomes
+\[
+f(x) = f(0) + x f'(0) + \frac{x^2}{2!} f''(0) + \cdots = \sum_{n=0}^\infty \frac{f^{(n)}(0)}{n!} x^n.
+\]
+An immediate application of the Maclaurin series is in the expansion of various transcendental functions into infinite (power) series.
+
+\paragraph{Example: Exponential Function}
+Let \(f(x) = e^x\). Differentiating and setting \(x = 0\), we have
+\[
+f^{(n)}(0) = 1 \quad \text{for all } n = 0, 1, 2, \dots.
+\]
+Then, using the Maclaurin series formula, we obtain
+\[
+e^x = \sum_{n=0}^\infty \frac{x^n}{n!} = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots.
+\]
+This series converges absolutely for all \(x \in (-\infty, \infty)\), as can be verified using the d'Alembert ratio test.
+
+\paragraph{Example: Logarithm}
+For another Maclaurin expansion, let \(f(x) = \ln(1 + x)\). Differentiating, we find
+\[
+f'(x) = \frac{1}{1+x}, \quad f^{(n)}(x) = (-1)^{n-1} (n-1)! (1+x)^{-n}.
+\]
+Substituting into the Maclaurin series formula, we get
+\[
+\ln(1 + x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \frac{x^4}{4} + \cdots = \sum_{n=1}^\infty \frac{(-1)^{n-1} x^n}{n}.
+\]
+This series converges for \(-1 < x \leq 1\), as established by the d'Alembert ratio test. At \(x = 1\), the series becomes the alternating harmonic series:
+\[
+\ln 2 = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots = \sum_{n=1}^\infty \frac{(-1)^{n-1}}{n}.
+\]
+At \(x = -1\), the series diverges, as it reduces to the harmonic series.
+
+\subsection{Properties of Power Series}
+A power series has the general form
+\[
+f(x) = \sum_{n=0}^\infty a_n x^n,
+\]
+where \(a_n\) are constants. The series converges for \(-R < x < R\), where \(R\) is the radius of convergence, determined by the ratio or root test:
+\[
+\lim_{n \to \infty} \frac{a_{n+1}}{a_n} = R^{-1}.
+\]
+At the endpoints \(x = \pm R\), convergence must be checked separately.
+
+Within \(-R < x < R\), the series converges uniformly and absolutely on any subinterval \(-S \leq x \leq S\) (\(0 < S < R\)), as shown by the Weierstrass M test. The sum \(f(x)\) is continuous, and term-by-term differentiation or integration is valid, yielding new power series with the same radius of convergence.
+
+\subsection{Uniqueness Theorem}
+If a function has two power series representations with overlapping intervals of convergence, their coefficients must be identical:
+\[
+f(x) = \sum_{n=0}^\infty a_n x^n = \sum_{n=0}^\infty b_n x^n \implies a_n = b_n.
+\]
+This is proven by setting \(x = 0\) and differentiating repeatedly to isolate coefficients. The uniqueness of power series is crucial in applications like differential equations and quantum mechanics.
+
+\subsection{Indeterminate Forms}
+The power-series representation of functions is often useful in evaluating indeterminate forms and is the basis of l’Hôpital’s rule, which states that if the ratio of two differentiable functions \(f(x)\) and \(g(x)\) becomes indeterminate, of the form \(0/0\), at \(x = x_0\), then
+\[
+\lim_{x \to x_0} \frac{f(x)}{g(x)} = \lim_{x \to x_0} \frac{f'(x)}{g'(x)}.
+\]
+Proof of this result is the subject of Exercise 1.2.12.
+
+Sometimes it is easier to introduce power-series expansions than to evaluate the derivatives that enter l’Hôpital’s rule. For examples of this strategy, see the following example.
+
+\paragraph{Example: Alternative to L’Hôpital’s Rule}
+Evaluate
+\[
+\lim_{x \to 0} \frac{1 - \cos x}{x^2}.
+\]
+Replacing \(\cos x\) by its Maclaurin-series expansion, we obtain
+\[
+1 - \cos x = 1 - \left(1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \cdots\right) = \frac{x^2}{2!} - \frac{x^4}{4!} + \cdots.
+\]
+Dividing by \(x^2\), we have
+\[
+\frac{1 - \cos x}{x^2} = \frac{1}{2!} - \frac{x^2}{4!} + \cdots.
+\]
+Letting \(x \to 0\), the higher-order terms vanish, and we find
+\[
+\lim_{x \to 0} \frac{1 - \cos x}{x^2} = \frac{1}{2}.
+\]
+
+\subsection{Inversion of Power Series}
+Suppose we are given a series
+\[
+y - y_0 = a_1 (x - x_0) + a_2 (x - x_0)^2 + \cdots = \sum_{n=1}^\infty a_n (x - x_0)^n.
+\]
+This expresses \(y - y_0\) in terms of \(x - x_0\). However, it may be desirable to have an explicit expression for \(x - x_0\) in terms of \(y - y_0\). That is, we want an expression of the form
+\[
+x - x_0 = \sum_{n=1}^\infty b_n (y - y_0)^n,
+\]
+with the coefficients \(b_n\) to be determined in terms of the \(a_n\).
+
+A brute-force approach, which is perfectly adequate for the first few coefficients, is to substitute the series for \(y - y_0\) into the series for \(x - x_0\). By equating coefficients of like powers of \(y - y_0\) on both sides, and using the uniqueness of power series, we find:
+\[
+b_1 = \frac{1}{a_1}, \quad b_2 = -\frac{a_2}{a_1^3}, \quad b_3 = \frac{2a_2^2 - a_1 a_3}{a_1^5}, \quad b_4 = \frac{5a_1 a_2 a_3 - a_1^2 a_4 - 5a_2^3}{a_1^7},
+\]
+and so on.
+
+\end{document}
