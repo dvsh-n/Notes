@@ -1,0 +1,112 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\title{Project Brainstorming}
+\author{Devesh Nath}
+\date{\today}
+
+\maketitle
+
+\section{Immitation Learning, Multimodaliity, Neural ODE, Reachability, Safety}
+\subsection{Problem}
+Immitation learning datasets have multimodal trajectory distributions (going fro the left or the right as an example). Methods like CROWN for reachable set propagations cannot handle such multimodality because the estimate gets too conservative at decision boundaries.
+Tthis problem can be solved by some sort of mode collapse where the trajectories collapse to a random mode or the closest mode to the initial state.   
+
+\subsection{Contractive Policy}
+Learning provably contractive policies like (CONTRACTIVE DYNAMICAL IMITATION POLICIES FOR EFFICIENT OUT-OF-SAMPLE RECOVERY) is a good idea because then trajectories can collapse to a mode and be provably contractive, being in favor of reachability analysis. 
+However this paper might not generalize well to rich distributions because of the low expressieness of the REN structure. When I initially trained the neural ODE by integrating it whole and then doing MSE, I could visually see contractive behaviour like what is in the paper.
+But this paper puts it into a framework to prove that it is contractive. I will try to train it the contractive way again so it falls to a mode and see if CROWN works better. 
+
+\subsection{One way of dealing with multimodality}
+Still, all of that assures that the NODE is contractive but still there will be decision boundaries at t0. One way to change that is to have some way of randomly selecting a mode to converge to. We con do something like clustering at the start of training to cluster all the given trajecoties into different modes.
+Some ways of doing that clustering can be any classical method (K Means, K Shift, Agglomerative Clustering, DBSCAN etc) or a ML way (VAE, VQ-VAE, and maybe some more ways I havent thought of) and represent the cluster's modes by some variable z. Once they are clustered, we can use that during training. During training we 
+sample a z, add that as a param to the NODE, rollout the NODE and minimize the error to any trajectory in the mode z. During inference, we randomly sample z from our codebook of trajectories and all initial points in the state space go towards one distribution.
+
+\subsection{Learned Barrier Functions from depth info}
+Since our planner is working in a space with identity dynamics, the simple learned barrier function that I was proposing can give us safe plans, adapting to the depth cloud at test time. However, we would just have a plan but no dynamic feasibility guarantees or enforcement. If we can form a feasible optimization problem where we optimize for both the dynamic feasibility and satisfying the CBF then that would be awesome. 
+Something like:
+\[
+\begin{aligned}
+    &\text{minimize} && \sum_{t=0}^{T} \|\dot{x_{t}} - v_{\theta}(x,t)\|^2 \notag \\
+    &\text{subject to} && \dot{x_{t}} = dt * (f(x_{t}) + g(x_{t})u_{t}) \notag \\
+    &&& \frac{dh(x_{i})}{dx}.v_{\theta}(x,t) + \alpha(h(x_{i})) \geq 0 \notag \\
+    &&& u_{t} \in \mathbb{U} \notag \\
+\end{aligned}
+\]
+
+\section{Dynamically feasible Neural ODEs}
+Currently we our neural ODE is: \[f_\theta(x, t) = \frac{dx}{dt}\]
+
+We are training the neural ODE by fitting it to \(x_{t+1} - x_{t} = \dot{x}\). Since all the trajectories we collect are already  (since we are collecting them on the orignal system) dynamically feasible, the measure for how dynamically feasible our generated trajectory is just the model error. 
+
+We can get concrete bounds on the error by using the trusted domain construction using the method in Glen's paper. But where would that be helpful?
+
+Problems we can solve (at least those that I can think of):
+\begin{enumerate}
+    \item If the trajectory was collected on another system then we would want to make our neural ODE dynamically feasible. Lets say we had a smaller robot arm to collect trajectories and a larger arm to replicate it on. Then finding a way to ensure dynamical feasibility makes sense. 
+    \item \(\|f(x,u) - g(x,u)\| < \epsilon\) where \(f\) is the real system and \(g\) is the neural ODE dynamics. Can we do something like \(f(x,u) < g(x,u) + \epsilon\) where after the first step we add \(\epsilon\) to \(g(x,u)\) and get the interval of where \(f(x,u)\) can be. Then propagate intervals using CROWN?
+\end{enumerate}
+
+\section{Dynamically feasible CFM Trajectories}
+Neural ODE learned dynamics:\[\dot{x} = f(x) + g(x)u\] where \(u \in \mathbb{U}\) which is the allowable set of controls. 
+
+CFM gives us statistically accurate trajectories so they are not dynamically feasible but look close to the target distribution.
+
+We can formulate this into an optimization problem to project the trajectories to a feasible one.
+
+\[
+\begin{aligned}
+    &\text{minimize} && \min_{u_{t}} \sum_{t=0}^{T} \|x_{t+1} - x_{d,t+1}\|^2 + \|u_t\|^2 \notag \\
+    &\text{subject to} && x_{t+1} = x_{t} + dt * (f(x_{t}) + g(x_{t})u_{t}) \notag \\
+    &&& u_{t} \in \mathbb{U} \notag \\
+\end{aligned}
+\]
+
+\(x_{d,t}\) is the desired trajectory, output of the CFM model after integration.
+
+\subsection{Barrier Functions}
+Since diffusion/CFM dynamics are similar, \(\dot{x} = v_{\theta}(x,t)\) and very simple, we can treat the dynamics as \(\dot{x} = u\). Because of this simplification we can use barrier functions that have the following properties:
+\begin{itemize}
+    \item \(h(x) \geq 0\) for all \(x \in \mathbb{S}\) where \(\mathbb{S}\) is the state space.
+    \item \(h(x) \leq 0\) for all \(x \in \mathbb{S}^c\) where \(\mathbb{S}^c\) is the set of states that are not allowed.
+    \item \(h(x)\) is continuously differentiable. 
+    \item \(\frac{dh(x_{i})}{dx}.v_{\theta,i}(x,t) + \alpha(h(x_{i})) \geq 0\) is a relatively simple QP to solve because of the identity dynamics of CFM. Here t is the CFM time 0 -> 1 and i is the planning time.
+\end{itemize}
+
+Such a barrier function should be easily learnable straight from the input pointcloud data. We can split the FOV of the depth camera and split it into a voxel grid of N points. All the voxels that have objects can be labeled as \textbf{unsafe}. This includes everything we cant observe from the camera. 
+Every other voxel can be labeled as \textbf{safe}.
+
+We can then train an unsupervised model to learn the barrier function. All the voxels can be treated as intevrals to CROWN. The loss function can be formulated like this:
+\[\mathcal{L} = \sum_{(\underline{x},\overline{x}) \in \mathbb{S}} max(0, -E_{l}(h(x), \underline{x}, \overline{x})) + \sum_{(\underline{x},\overline{x}) \in \mathbb{S}^c} -min(0, -E_{u}(h(x), \underline{x}, \overline{x}))\]
+where \(E_{l}(h(x), \underline{x}, \overline{x}) = \text{CROWN}(h(x), \underline{x}, \overline{x})[0]\) and \(E_{u}(h(x), \underline{x}, \overline{x}) = \text{CROWN}(h(x), \underline{x}, \overline{x})[1]\) are the scalar lower and upper bounds of the intervals returned by CROWN.
+
+This trains h(x) to be a barrier function from the observed data. Theres one thing we need to consider for this training to be feasible. Since we are evaluating boxes and enforcing them to be positive and negative even when they are beside each other, their boundaries will be discontinuous. 
+To mitigate this, we can create sort of a buffer between the safe and the unsafe regions where you can penalize the lipschitz continuity of the barrier function. This can be done by adding a term to the loss function that penalizes the Lipschitz continuity of the barrier function to ensure continuity and we would also have to use tanh or 
+a continuous activation function that compatible with CROWN. 
+
+\subsection{Guarantees on the learned dynamics}
+We can use Glen's papers method to get a bound on the error of the learned dynamics. We can incorporate that in the optimization problem. That is if we can do something like this \(f(x,u) < g(x,u) + \epsilon\) where we know \(x_{0}\).
+So at \(x_{t+1}\) we can get an interval \(\underline{x_{t+1}} \leq x_{t+1} \leq \overline{x_{t+1}}\) where \(\underline{x_{t+1}} = x_{t} + dt * (f(x_{t}) + g(x_{t})u_{t}) - \epsilon\) and \(\overline{x_{t+1}} = x_{t} + dt * (f(x_{t}) + g(x_{t})u_{t}) + \epsilon\). The true state is in the interval.
+
+Not sure how this is helpful but just puttin git here for the sake of brainstorming. 
+
+% We can change the optimization problem to be:
+% \[
+% \begin{aligned}
+%     &\text{minimize} && \min_{u_{t}} \sum_{t=0}^{T} \|x_{t+1} - x_{d,t+1}\|^2 + \|u_t\|^2 \notag \\
+%     &\text{subject to} && x_{t+1} - \epsilon \leq x_{t+1} \leq x_{t+1} += \epsilon & \text{where} && x_{t+1} = x_{t} + dt * (f(x_{t}) + g(x_{t})u_{t}) \notag \\
+%     &&& u_{t} \in \mathbb{U} \notag \\ 
+% \end{aligned}
+% \]
+
+
+
+
+
+\end{document}
