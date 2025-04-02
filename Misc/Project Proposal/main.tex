@@ -32,6 +32,9 @@ Diffusion model + Barrier functions. 3 Different ways of implementing this.
 \subsection{DDAT: DIffusion Policies enforcing dynamically feasible trajectories}
 Predict trajectories using diffusion. Project them onto the the reachable set of the dynamics for dynamic feasibility. 
 
+\subsection{Model-Based Diffusion for Trajectory Optimization}
+Use diffusion models as policy optmizers that predict the control action to achieve a task in an MPC fashion.
+
 \section{Immitation Learning, Multimodaliity, Neural ODE, Reachability, Safety}
 \subsection{Problem}
 Immitation learning datasets have multimodal trajectory distributions (going fro the left or the right as an example). Methods like CROWN for reachable set propagations cannot handle such multimodality because the estimate gets too conservative at decision boundaries.
