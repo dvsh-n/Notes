@@ -12,6 +12,25 @@
 \date{\today}
 
 \maketitle
+\section{Whatd been done so far and what can we use}
+\subsection{Neural Network Verification with Branch-and-Bound for General Nonlinearities}
+For general non linearities, imagine sine, over an interval the linear upper and lowe bounds can be conservative. What they do is, they have a function that describes how conservative the bounds are and split if it is too conservative and keep doing that till you reach a limit of branches. So on a sine activation function, if you have a long interval,
+the bounds can be really conservative but it you split the crests and troughs from the part thats mostly linear, you get tighter bounds from the split. Its a bit slower but gives very tight bounds. 
+
+\subsection{Learning Complex Motion Plans using Neural ODEs with Safety and Stability Guarantees}
+Generate Neural ODE Trajectory. No guarantees on the ODEs generated trajectory itself but guarantees disturbance rejection using CLF and safety using CBF.
+
+\subsection{BAB-ND: LONG-HORIZON MOTION PLANNING WITH BRANCH-AND-BOUND AND NEURAL DYNAMICS}
+Using branch and bound to get the optimal control action. Decide an action space to search, sample, lowest sample is upper bound for optimal, split, call crown, whichever space has LB above the upper bound we selected, prune it.
+
+\subsection{RAIL: Reachability-Aided Imitation Learning for Safe Policy Execution}
+Train an imitation learning policy. Inflate the arms geometry and move the inflated arm set using the control by the NODE. Union all the inflated arm positions, thats your reachable set. If thats in colission, switch to backup planner and plan. Do in a MPC fashion.
+
+\subsection{Safe Diffuser}
+Diffusion model + Barrier functions. 3 Different ways of implementing this.
+
+\subsection{DDAT: DIffusion Policies enforcing dynamically feasible trajectories}
+Predict trajectories using diffusion. Project them onto the the reachable set of the dynamics for dynamic feasibility. 
 
 \section{Immitation Learning, Multimodaliity, Neural ODE, Reachability, Safety}
 \subsection{Problem}
@@ -19,7 +38,7 @@ Immitation learning datasets have multimodal trajectory distributions (going fro
 Tthis problem can be solved by some sort of mode collapse where the trajectories collapse to a random mode or the closest mode to the initial state.   
 
 \subsection{Contractive Policy}
-Learning provably contractive policies like (CONTRACTIVE DYNAMICAL IMITATION POLICIES FOR EFFICIENT OUT-OF-SAMPLE RECOVERY) is a good idea because then trajectories can collapse to a mode and be provably contractive, being in favor of reachability analysis. 
+Learning provably contractive policies like [3] is a good idea because then trajectories can collapse to a mode and be provably contractive, being in favor of reachability analysis. 
 However this paper might not generalize well to rich distributions because of the low expressieness of the REN structure. When I initially trained the neural ODE by integrating it whole and then doing MSE, I could visually see contractive behaviour like what is in the paper.
 But this paper puts it into a framework to prove that it is contractive. I will try to train it the contractive way again so it falls to a mode and see if CROWN works better. 
 
@@ -33,14 +52,14 @@ Since our planner is working in a space with identity dynamics, the simple learn
 Something like:
 \[
 \begin{aligned}
-    &\text{minimize} && \sum_{t=0}^{T} \|\dot{x_{t}} - v_{\theta}(x,t)\|^2 \notag \\
-    &\text{subject to} && \dot{x_{t}} = dt * (f(x_{t}) + g(x_{t})u_{t}) \notag \\
-    &&& \frac{dh(x_{i})}{dx}.v_{\theta}(x,t) + \alpha(h(x_{i})) \geq 0 \notag \\
-    &&& u_{t} \in \mathbb{U} \notag \\
+    &\text{minimize}_{\{u_t\}_{t=0}^T} && \sum_{t=0}^{T} \|\dot{x_{t}} - v_{\theta}(x_{t}, t)\|^2 \notag \\
+    &\text{subject to} && \dot{x_{t}} = f(x_{t}) + g(x_{t})u_{t} \quad \text{(System dynamics)} \notag \\
+    &&& \frac{\partial h(x_{t})}{\partial x} \cdot \dot{x_{t}} + \alpha(h(x_{t})) \geq 0 \quad \text{(CBF condition)} \notag \\
+    &&& u_{t} \in \mathbb{U} \quad \text{(Control constraints)} \notag \\
 \end{aligned}
 \]
 
-\section{Dynamically feasible Neural ODEs}
+\subsection{Dynamically feasible Neural ODEs}
 Currently we our neural ODE is: \[f_\theta(x, t) = \frac{dx}{dt}\]
 
 We are training the neural ODE by fitting it to \(x_{t+1} - x_{t} = \dot{x}\). Since all the trajectories we collect are already  (since we are collecting them on the orignal system) dynamically feasible, the measure for how dynamically feasible our generated trajectory is just the model error. 
@@ -50,7 +69,8 @@ We can get concrete bounds on the error by using the trusted domain construction
 Problems we can solve (at least those that I can think of):
 \begin{enumerate}
     \item If the trajectory was collected on another system then we would want to make our neural ODE dynamically feasible. Lets say we had a smaller robot arm to collect trajectories and a larger arm to replicate it on. Then finding a way to ensure dynamical feasibility makes sense. 
-    \item \(\|f(x,u) - g(x,u)\| < \epsilon\) where \(f\) is the real system and \(g\) is the neural ODE dynamics. Can we do something like \(f(x,u) < g(x,u) + \epsilon\) where after the first step we add \(\epsilon\) to \(g(x,u)\) and get the interval of where \(f(x,u)\) can be. Then propagate intervals using CROWN?
+    \item \(\|f(x,u) - g(x,u)\| < \epsilon\) where \(f\) is the real system and \(g\) is the neural ODE dynamics. Can we do something like \(f(x,u) < g(x,u) + \epsilon\) where after the first step we add \(\epsilon\) to \(g(x,u)\) and get the interval (I would assume overapproximated) where the true dynamics lie. Lets say we also have a controller \(u^{\star}(x)\) in the next step we pass the interval of x to \(g(x,u)\) to get the reachable set and add \(\epsilon\) to it to construct another interval? What would that be useful for? Propagating the probable interval where the true dynamics lie?
+    \item After meeting with Glen: It is also important to enforce dynamic feasibility outside of the data points the neural ODE has seen during training, and that's where a dynamics/physics-informed loss would come in. Dually train the NODE and the controller. At all intervals of \(x\), evaluate the upper bound on \(\|f(x) - g(x)u - NODE(x)\|\) to ensure bounded error across the state space. Use a contraction-based controller around \(u^{\star}\), then use \(x^{\star}\) and \(u^{\star}\) to get the reachable set around the nominal trajectory.
 \end{enumerate}
 
 \section{Dynamically feasible CFM Trajectories}
@@ -62,9 +82,10 @@ We can formulate this into an optimization problem to project the trajectories t
 
 \[
 \begin{aligned}
-    &\text{minimize} && \min_{u_{t}} \sum_{t=0}^{T} \|x_{t+1} - x_{d,t+1}\|^2 + \|u_t\|^2 \notag \\
+    &\text{minimize}_{\{u_t\}_{t=0}^T} &&  \sum_{t=0}^{T} \alpha \|x_{t+1} - x_{d,t+1}\|^2 + \beta \|u_t\|^2 \notag \\
     &\text{subject to} && x_{t+1} = x_{t} + dt * (f(x_{t}) + g(x_{t})u_{t}) \notag \\
     &&& u_{t} \in \mathbb{U} \notag \\
+    &&& x_0 = x_{init} \notag \\
 \end{aligned}
 \]
 
@@ -94,7 +115,7 @@ a continuous activation function that compatible with CROWN.
 We can use Glen's papers method to get a bound on the error of the learned dynamics. We can incorporate that in the optimization problem. That is if we can do something like this \(f(x,u) < g(x,u) + \epsilon\) where we know \(x_{0}\).
 So at \(x_{t+1}\) we can get an interval \(\underline{x_{t+1}} \leq x_{t+1} \leq \overline{x_{t+1}}\) where \(\underline{x_{t+1}} = x_{t} + dt * (f(x_{t}) + g(x_{t})u_{t}) - \epsilon\) and \(\overline{x_{t+1}} = x_{t} + dt * (f(x_{t}) + g(x_{t})u_{t}) + \epsilon\). The true state is in the interval.
 
-Not sure how this is helpful but just puttin git here for the sake of brainstorming. 
+Not sure how this is helpful but just putting it here for the sake of brainstorming. 
 
 % We can change the optimization problem to be:
 % \[
@@ -106,7 +127,13 @@ Not sure how this is helpful but just puttin git here for the sake of brainstorm
 % \]
 
 
+\section{References}
 
+\begin{enumerate}
+    \item Glen's paper on trusted domain construction for bounding errors in learned dynamics: \textit{Glen et al., "Trusted Domain Construction for Neural ODEs", 2021}.
+    \item CROWN for reachable set propagation: \textit{Zhang et al., "Efficient Neural Network Verification with CROWN", 2018}.
+    \item Contractive Dynamical Imitation Policies: \textit{Richards et al., "Contractive Dynamical Imitation Policies for Efficient Out-of-Sample Recovery", 2020}.
+\end{enumerate}
 
 
 \end{document}
