@@ -12,6 +12,12 @@
 \date{\today}
 
 \maketitle
+
+\section{Problem Statement}
+Neural ODEs enhance imitation learning by accurately modeling continuous dynamics, improving data efficiency, handling irregular sampling, and optimizing memory usage. 
+However, there has been no work in enforcing and validating the dynamic feasibility of such neural ODE Imitation Learning policies. In this work, we propose a novel approach to compute verifiable, overapproximate bounds on the dynamic feasibility of Neural ODE-based imitation learning policies. Furthermore, we introduce an algorithm that propagates a reachable set—accounting for model error—to ensure safety constraints such as collision avoidance are rigorously satisfied.
+
+
 \section{Whatd been done so far and what can we use}
 \subsection{Neural Network Verification with Branch-and-Bound for General Nonlinearities}
 For general non linearities, imagine sine, over an interval the linear upper and lowe bounds can be conservative. What they do is, they have a function that describes how conservative the bounds are and split if it is too conservative and keep doing that till you reach a limit of branches. So on a sine activation function, if you have a long interval,
